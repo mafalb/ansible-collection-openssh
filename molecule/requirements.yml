@@ -3,5 +3,6 @@
 
 collections:
 - name: mafalb.ansible
+- name: mafalb.squid
 
 ...
