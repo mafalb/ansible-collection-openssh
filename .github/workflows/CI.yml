@@ -63,10 +63,6 @@ jobs:
           distribution: ubuntu
           version: focal
 
-        - target: fedora31
-          distribution: fedora
-          version: 31
-
         - target: fedora32
           distribution: fedora
           version: 32
@@ -102,10 +98,11 @@ jobs:
       with:
         path: ansible_collections/mafalb/openssh
 
-    - name: install molecule
-      run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }}
     - name: install dependencies
       run: ansible-galaxy collection install -r molecule/requirements.yml
+
+    - name: install molecule
+      run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }}
 
     - name: check ansible version
       run: |
