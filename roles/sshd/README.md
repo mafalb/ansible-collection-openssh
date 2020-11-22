@@ -11,9 +11,18 @@ Ansible role mafalb.openssh.sshd
   - role: mafalb.openssh.sshd
 ```
 
+```yaml
+- name: remove sshd
+  hosts: localhost
+  roles:
+  - role: mafalb.openssh.sshd
+    sshd_state: absent
+```
+
 ## Variables
+
+```ssh_state: present``` # [present|absent]
 
 ## License
 
 GPLv3
-

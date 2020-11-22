@@ -9,7 +9,7 @@ A collection for openssh related things.
 
 ## Roles
 
-### [mafalb.openssh.openssh](roles/openssh/README.md)
+### [mafalb.openssh.openssh](roles/sshd/README.md)
 
 ## License
 
