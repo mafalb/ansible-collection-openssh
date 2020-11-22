@@ -1,0 +1,14 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: Verify
+  hosts: all,!infrastructure_group
+
+  tasks:
+
+  - name: ssh login is possible
+    delegate_to: ci_proxy
+    command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh1@{{ inventory_hostname }} hostname
+    changed_when: false
+
+...

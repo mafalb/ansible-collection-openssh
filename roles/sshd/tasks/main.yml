@@ -1,0 +1,24 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: get OS specific variables
+  with_first_found:
+  - "{{ ansible_os_family }}-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution_release }}.yml"
+  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
+  - "{{ ansible_os_family }}.yml"
+  include_vars:
+    file: "{{ item }}"
+
+- name: assertions
+  assert:
+    that:
+    - sshd_packages is defined
+    - sshd_service is defined
+    - sshd_state in [ 'present', 'absent' ]
+
+- name: include_tasks for {{ alias }}
+  include_tasks: "{{ sshd_state }}.yml"
+
+...

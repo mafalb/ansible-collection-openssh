@@ -1,0 +1,26 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+namespace: mafalb
+name: openssh
+version: 0.0.1
+readme: README.md
+
+authors: []
+
+description: Ansible collection openssh
+
+license:
+- GPL-3.0-or-later
+
+tags:
+- openssh
+
+dependencies: {}
+
+repository: https://github.com/mafalb/ansible-collection-openssh
+documentation: https://github.com/mafalb/ansible-collection-openssh
+homepage: https://github.com/mafalb/ansible-collection-openssh
+issues: https://github.com/mafalb/ansible-collection-openssh/issues
+
+...

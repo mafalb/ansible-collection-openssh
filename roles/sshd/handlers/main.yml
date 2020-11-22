@@ -1,0 +1,10 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: reload sshd
+  service:
+    name: "{{ sshd_service }}"
+    state: reloaded
+  when: not _sshd_was_just_started.changed
+
+...
