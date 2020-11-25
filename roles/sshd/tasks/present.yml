@@ -29,7 +29,7 @@
     name: "{{ sshd_service }}"
     enabled: true
 
-- name: command
+- name: command # noqa 303
   command: systemctl show sshd
   changed_when: false
 
