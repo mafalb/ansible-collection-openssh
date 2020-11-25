@@ -29,6 +29,10 @@
     name: "{{ sshd_service }}"
     enabled: true
 
+- name: command
+  command: systemctl show sshd
+  changed_when: false
+
 - name: sshd is started
   service:
     name: "{{ sshd_service }}"
