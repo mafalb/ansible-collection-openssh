@@ -93,7 +93,7 @@ jobs:
 
     steps:
 
-    - name: checkout collection ansible
+    - name: checkout collection mafalb.openssh
       uses: actions/checkout@v2
       with:
         path: ansible_collections/mafalb/openssh
@@ -102,7 +102,7 @@ jobs:
       run: ansible-galaxy collection install -r molecule/requirements.yml
 
     - name: install molecule
-      run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }}
+      run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
 
     - name: check ansible version
       run: |
