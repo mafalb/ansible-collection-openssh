@@ -6,7 +6,8 @@ name: openssh
 version: 0.0.1
 readme: README.md
 
-authors: []
+authors:
+- Markus Falb <markus.falb@mafalb.at>
 
 description: Ansible collection openssh
 
