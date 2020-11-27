@@ -67,8 +67,8 @@ provisioner:
       interpreter_python: auto
   lint:
     name: ansible-lint
-  env:
-    ANSIBLE_COLLECTIONS_PATHS: "../../../../..:~/.ansible/collections"
+#  env:
+#   ANSIBLE_COLLECTIONS_PATHS: "../../../../..:~/.ansible/collections"
 
 verifier:
   name: ansible
