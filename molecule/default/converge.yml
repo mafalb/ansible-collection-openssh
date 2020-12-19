@@ -32,7 +32,7 @@
   tasks:
 
   - name: get public key
-    delegate_to: ci_proxy
+    delegate_to: ci-proxy
     command: cat /tmp/id_rsa.pub
     changed_when: false
     register: _public_key
