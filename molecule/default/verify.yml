@@ -7,7 +7,7 @@
   tasks:
 
   - name: ssh login is possible
-    delegate_to: ci_proxy
+    delegate_to: ci-proxy
     command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh1@{{ inventory_hostname }} /usr/bin/true
     changed_when: false
 
