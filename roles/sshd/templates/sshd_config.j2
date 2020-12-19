@@ -16,7 +16,7 @@
 # semanage port -a -t ssh_port_t -p tcp #PORTNUMBER
 #
 
-{% if ansible_os_family == 'Debian' %}
+{% if sshd_config_has_global_include %}
 Include /etc/ssh/sshd_config.d/*.conf
 {% endif %}
 

@@ -1,13 +1,1 @@
-# vim: set ft=yaml ts=2 expandtab:
----
-
-sshd_packages:
-- openssh-server
-
-sshd_extra_packages:
-- initscripts
-
-sshd_service: sshd
-sftp_subsystem: /usr/libexec/openssh/sftp-server
-
-...
+Fedora-32.yml

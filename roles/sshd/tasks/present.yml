@@ -15,7 +15,7 @@
       state: directory
       mode: 00750
     notify: reload sshd
-    when: ansible_os_family == 'Debian'
+    when: sshd_config_has_global_include
 
   - name: sshd main config is present
     template:
@@ -23,16 +23,6 @@
       dest: /etc/ssh/sshd_config
       mode: 00640
     notify: reload sshd
-
-- name: sshd is enabled
-  service:
-    name: "{{ sshd_service }}"
-    enabled: true
-
-- name: command # noqa 303
-  command: systemctl show sshd
-  changed_when: false
-  when: false
 
 - name: sshd is started
   service:
