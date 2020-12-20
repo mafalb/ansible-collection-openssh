@@ -6,6 +6,7 @@
 
   environment:
     http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
 
   tasks:
 
@@ -25,6 +26,7 @@
 
   environment:
     http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
 
   roles:
   - role: mafalb.openssh.sshd
