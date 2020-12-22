@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- name: Converge
+- name: converge clients
   hosts: proxy_group
 
   environment:
@@ -21,7 +21,8 @@
       path: /tmp/id_rsa
       type: rsa
 
-- name: Converge
+
+- name: converge servers
   hosts: all,!infrastructure_group
 
   environment:
@@ -47,7 +48,6 @@
         name: "{{ item }}"
       loop:
       - testssh1
-      - testssh2
 
     - name: authorized_keys is present
       authorized_key:
@@ -55,6 +55,52 @@
         key: "{{ _public_key.stdout }}"
       loop:
       - testssh1
-      - testssh2
+
+  - block:
+
+    - name: group for chrooted sftp users is present
+      group:
+        name: sftpchroot
+
+    - name: groups are present
+      group:
+        name: "{{ item }}"
+      loop:
+      - testsftp1
+
+    - name: home directories are present
+      file:
+        path: /home/{{ item }}
+        state: directory
+        owner: root
+        group: "{{ item }}"
+        mode: 00750
+      loop:
+      - testsftp1
+
+    - name: testfile is present
+      copy:
+        content: testfile
+        dest: /home/{{ item }}/1_testfile
+        mode: 00644
+      loop:
+      - testsftp1
+
+    - name: user is present
+      user:
+        name: "{{ item }}"
+        create_home: false
+        group: "{{ item }}"
+        groups:
+        - sftpchroot
+      loop:
+      - testsftp1
+
+    - name: authorized_keys is present
+      authorized_key:
+        user: "{{ item }}"
+        key: "{{ _public_key.stdout }}"
+      loop:
+      - testsftp1
 
 ...

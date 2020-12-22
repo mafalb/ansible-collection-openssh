@@ -19,7 +19,7 @@
 
   - name: sshd main config is present
     template:
-      src: sshd_config.j2
+      src: "{{ sshd_config_template }}"
       dest: /etc/ssh/sshd_config
       mode: 00640
     notify: reload sshd

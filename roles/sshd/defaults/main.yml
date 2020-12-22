@@ -3,7 +3,7 @@
 
 sshd_state: present
 sshd_config_d: /etc/ssh/sshd_config.d
-
+sshd_config_template: sshd_config.j2
 sshd_config:
   PermitRootLogin: prohibit-password
   PasswordAuthentication: 'no'

@@ -146,9 +146,12 @@ AcceptEnv XMODIFIERS
 # override default of no subsystems
 Subsystem	sftp	{{ sftp_subsystem }}
 
-# Example of overriding settings on a per-user basis
-#Match User anoncvs
-#	X11Forwarding no
-#	AllowTcpForwarding no
-#	PermitTTY no
-#	ForceCommand cvs server
+{% block Matches %}
+Match Group sftpchroot
+	ChrootDirectory %h
+	ForceCommand internal-sftp -f AUTH -l VERBOSE
+	AllowTcpForwarding no
+	X11Forwarding no
+	PermitTTY no
+{% endblock %}
+
