@@ -15,6 +15,11 @@
     command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh1@{{ inventory_hostname }} /bin/true
     changed_when: false
 
+  - name: ssh login is possible (global authorized_keys)
+    delegate_to: ci-proxy
+    command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh2@{{ inventory_hostname }} /bin/true
+    changed_when: false
+
   - name: sftp login is possible 1
     delegate_to: ci-proxy
     shell: |
@@ -43,11 +48,23 @@
     changed_when: false
     register: _sftp_3
 
+  - debug: var=_sftp_3.stdout_lines[-1]
+
   - name: assert that we are chrooted
     assert:
       that:
       - _sftp_1.stdout_lines[-1] is match('1_testfile')
       - _sftp_1.stdout_lines[-1] == _sftp_2.stdout_lines[-1]
-      - _sftp_3.stdout_lines[-1] == 'Remote working directory: /'
+      # the following is odd, but ansible 2.9 interpreted
+      # directory: /
+      # as dictionary
+      # The error was: unhashable type: 'dict'
+      - _sftp_3.stdout_lines[-1] == 'Remote working directory' + ':' + ' /'
 
+  - name: sftp login is possible (global authorized_keys)
+    delegate_to: ci-proxy
+    shell: |
+      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp2@{{ inventory_hostname }} <<SFTP
+      SFTP
+    changed_when: false
 ...

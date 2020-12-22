@@ -11,6 +11,13 @@
 
   - name: sshd_config.d is present
     file:
+      path: /etc/ssh/authorized_keys/
+      state: directory
+      mode: 00750
+    notify: reload sshd
+
+  - name: sshd_config.d is present
+    file:
       path: "{{ sshd_config_d }}"
       state: directory
       mode: 00750

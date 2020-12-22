@@ -48,13 +48,18 @@
         name: "{{ item }}"
       loop:
       - testssh1
+      - testssh2
 
     - name: authorized_keys is present
       authorized_key:
-        user: "{{ item }}"
+        user: testssh1
         key: "{{ _public_key.stdout }}"
-      loop:
-      - testssh1
+
+    - name: global authorized_keys is present
+      authorized_key:
+        user: root
+        key: "{{ _public_key.stdout }}"
+        path: /etc/ssh/authorized_keys/testssh2
 
   - block:
 
@@ -67,6 +72,7 @@
         name: "{{ item }}"
       loop:
       - testsftp1
+      - testsftp2
 
     - name: home directories are present
       file:
@@ -77,6 +83,7 @@
         mode: 00750
       loop:
       - testsftp1
+      - testsftp2
 
     - name: testfile is present
       copy:
@@ -85,6 +92,7 @@
         mode: 00644
       loop:
       - testsftp1
+      - testsftp2
 
     - name: user is present
       user:
@@ -95,12 +103,18 @@
         - sftpchroot
       loop:
       - testsftp1
+      - testsftp2
 
     - name: authorized_keys is present
       authorized_key:
-        user: "{{ item }}"
+        user: root
         key: "{{ _public_key.stdout }}"
-      loop:
-      - testsftp1
+        path: /home/testsftp1/.ssh/authorized_keys
+
+    - name: authorized_keys is present
+      authorized_key:
+        user: root
+        key: "{{ _public_key.stdout }}"
+        path: /etc/ssh/authorized_keys/testsftp2
 
 ...
