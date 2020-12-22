@@ -9,12 +9,11 @@
 - name: sshd is configured
   block:
 
-  - name: sshd_config.d is present
+  - name: global directory for authorized_keys is present
     file:
-      path: /etc/ssh/authorized_keys/
+      path: /etc/ssh/authorized_keys
       state: directory
-      mode: 00750
-    notify: reload sshd
+      mode: 00700
 
   - name: sshd_config.d is present
     file:
