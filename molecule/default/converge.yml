@@ -31,6 +31,7 @@
 
   roles:
   - role: mafalb.openssh.sshd
+    sshd_global_authorized_keys: true
 
   tasks:
 
@@ -57,9 +58,10 @@
 
     - name: global authorized_keys is present
       authorized_key:
-        user: root
+        user: testssh2
         key: "{{ _public_key.stdout }}"
         path: /etc/ssh/authorized_keys/testssh2
+        manage_dir: false
 
   - block:
 
@@ -107,14 +109,15 @@
 
     - name: authorized_keys is present
       authorized_key:
-        user: root
+        user: testsftp1
         key: "{{ _public_key.stdout }}"
         path: /home/testsftp1/.ssh/authorized_keys
 
     - name: authorized_keys is present
       authorized_key:
-        user: root
+        user: testsftp2
         key: "{{ _public_key.stdout }}"
         path: /etc/ssh/authorized_keys/testsftp2
+        manage_dir: false
 
 ...

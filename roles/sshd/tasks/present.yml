@@ -13,7 +13,8 @@
     file:
       path: /etc/ssh/authorized_keys
       state: directory
-      mode: 00700
+      mode: 00755
+    when: sshd_global_authorized_keys
 
   - name: sshd_config.d is present
     file:
