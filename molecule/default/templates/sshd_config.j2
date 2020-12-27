@@ -1,4 +1,4 @@
-{% extends "sshd_config.j2" %}
+{% extends "mafalb.openssh.sshd_config.j2" %}
 {% block Matches %}
 {% if sftponly_group_matches is defined %}
 {% for match in sftponly_group_matches %}

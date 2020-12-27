@@ -11,10 +11,10 @@ Ansible role mafalb.openssh.sshd
   - role: mafalb.openssh.sshd
 ```
 
-you could write a custom template that extends sshd_config with a block "Matches", something like
+you could write a custom template that extends the base template from the role with a block named "Matches", something like
 
 ```jinja2
-{% extends "sshd_config.j2" %}
+{% extends "mafalb.openssh.sshd_config.j2" %}
 {% block Matches %}
 {% if sftponly_group_matches is defined %}
 {% for match in sftponly_group_matches %}
@@ -41,6 +41,10 @@ and then you would use it like
     - "*,!root,!wheel"
 ```
 
+also note that if you do not extend the template you can specify a completely standalone config file/template
+
+you can also remove openssh
+
 ```yaml
 - name: remove sshd
   hosts: localhost
@@ -53,7 +57,7 @@ and then you would use it like
 
 ```state: present``` # [present|absent]
 
-```sshd_config_template: test.conf.j2``` # [sshd_config.j2]
+```sshd_config_template: test.conf.j2```
 
 ## License
 

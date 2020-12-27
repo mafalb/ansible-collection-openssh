@@ -151,11 +151,11 @@ AcceptEnv XMODIFIERS
 Subsystem	sftp	{{ sftp_subsystem }}
 
 {% block Matches %}
-Match Group sftpchroot
-	ChrootDirectory %h
-	ForceCommand internal-sftp -f AUTH -l VERBOSE
-	AllowTcpForwarding no
-	X11Forwarding no
-	PermitTTY no
+#Match Group sftpchroot
+#	ChrootDirectory %h
+#	ForceCommand internal-sftp -f AUTH -l VERBOSE
+#	AllowTcpForwarding no
+#	X11Forwarding no
+#	PermitTTY no
 {% endblock %}
 
