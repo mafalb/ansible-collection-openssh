@@ -33,7 +33,7 @@ platforms:
   capabilities:
   - SYS_ADMIN
   # privileged: ${CI_CONTAINER_PRIVILEGED:-false}
-  privileged: true
+  privileged: false
   pre_build_image: ${CI_CONTAINER_PREBUILT:-false}
   tty: true
   groups:
