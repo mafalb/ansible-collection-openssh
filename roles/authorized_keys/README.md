@@ -26,6 +26,16 @@ Ansible role mafalb.openssh.authorized_keys
 
 ## Variables
 
+```user```
+
+```group```
+
+```mode```
+
+```directory_mode```
+
+```manage_dir```
+
 ## License
 
 GPLv3

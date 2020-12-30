@@ -2,5 +2,6 @@
 ---
 
 mode: 00600
+manage_dir: true
 
 ...

@@ -16,6 +16,7 @@
     group: "{{ group|default(user) }}"
     mode: "{{ directory_mode|default(mode + 00100) }}"
     setype: ssh_home_t
+  when: manage_dir is true
 
 - name: authorized_keys is present
   template:
