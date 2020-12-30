@@ -1,0 +1,30 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- name: assertions
+  assert:
+    that:
+    - mode|type_debug == 'int'
+    - path is defined
+    - user is defined
+
+- name: .ssh directory is present
+  file:
+    path: "{{ path.split('/')[:-1] }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ group|default(user) }}"
+    mode: "{{ directory_mode|default(mode + 00100) }}"
+    setype: ssh_home_t
+
+- name: authorized_keys is present
+  template:
+    src: authorized_keys.j2
+    dest: "{{ path }}"
+    owner: "{{ user }}"
+    group: "{{ group|default(user) }}"
+    mode: "{{ mode }}"
+    setype: ssh_home_t
+    backup: true
+
+...

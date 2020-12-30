@@ -110,17 +110,21 @@
       - testsftp1
       - testsftp2
 
-    - name: authorized_keys is present
-      authorized_key:
-        user: testsftp1
-        key: "{{ _public_key.stdout }}"
-        path: /home/testsftp1/.ssh/authorized_keys
+  - name: authorized_keys is present
+    include_role:
+      name: mafalb.openssh.authorized_keys
+    vars:
+      user: root
+      group: testsftp1
+      keys: "{{ [ _public_key.stdout ] }}"
+      path: /home/testsftp1/.ssh/authorized_keys
+      mode: 00640
 
-    - name: authorized_keys is present
-      authorized_key:
-        user: testsftp2
-        key: "{{ _public_key.stdout }}"
-        path: /etc/ssh/authorized_keys/testsftp2
-        manage_dir: false
+  - name: authorized_keys is present
+    authorized_key:
+      user: testsftp2
+      key: "{{ _public_key.stdout }}"
+      path: /etc/ssh/authorized_keys/testsftp2
+      manage_dir: false
 
 ...

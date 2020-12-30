@@ -67,4 +67,21 @@
       sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp2@{{ inventory_hostname }} <<SFTP
       SFTP
     changed_when: false
+
+
+  - name: .ssh is not writable
+    shell: su - testsftp1 -c "test ! -w .ssh"
+    changed_when: false
+    check_mode: false
+
+  - name: authorized_keys is readable
+    shell: su - testsftp1 -c "test -r .ssh/authorized_keys"
+    changed_when: false
+    check_mode: false
+
+  - name: autorized_keys is not writable
+    shell: su - testsftp1 -c "test ! -w .ssh/authorized_keys"
+    changed_when: false
+    check_mode: false
+
 ...
