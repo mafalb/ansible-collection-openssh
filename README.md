@@ -16,4 +16,3 @@ A collection for openssh related things.
 ## License
 
 GPLv3
-
