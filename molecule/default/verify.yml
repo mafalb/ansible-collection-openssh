@@ -69,17 +69,17 @@
     changed_when: false
 
 
-  - name: .ssh is not writable
+  - name: .ssh is not writable # noqa 305
     shell: su - testsftp1 -c "test ! -w .ssh"
     changed_when: false
     check_mode: false
 
-  - name: authorized_keys is readable
+  - name: authorized_keys is readable # noqa 305
     shell: su - testsftp1 -c "test -r .ssh/authorized_keys"
     changed_when: false
     check_mode: false
 
-  - name: autorized_keys is not writable
+  - name: autorized_keys is not writable # noqa 305
     shell: su - testsftp1 -c "test ! -w .ssh/authorized_keys"
     changed_when: false
     check_mode: false
