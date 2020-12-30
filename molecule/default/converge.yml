@@ -118,7 +118,7 @@
       group: testsftp1
       keys: "{{ [ _public_key.stdout ] }}"
       path: /home/testsftp1/.ssh/authorized_keys
-      mode: 00640
+      mode: '640'
 
   - name: authorized_keys is present
     authorized_key:
