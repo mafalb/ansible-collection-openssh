@@ -16,6 +16,8 @@ license:
 
 tags:
 - openssh
+- ssh
+- sshd
 
 dependencies: {}
 

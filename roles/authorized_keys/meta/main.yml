@@ -2,8 +2,8 @@
 ---
 
 galaxy_info:
-  author: Markus
-  description: Ansible role mafalb.openssh.sshd
+  author: Markus Falb <markus.falb@mafalb.at>
+  description: Ansible role mafalb.openssh.authorized_keys
   license: GPLv3
   min_ansible_version: 2.9
 
@@ -29,8 +29,7 @@ galaxy_info:
     - buster
 
   galaxy_tags:
-  - sshd
-  - openssh
+  - authorizedkeys
   - ssh
 
 dependencies: []

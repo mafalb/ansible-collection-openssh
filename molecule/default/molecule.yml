@@ -16,8 +16,8 @@ lint: |
   flake8 -v
 
 platforms:
-- name: ci-${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-7}
-  image: ${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-7}
+- name: ci-${CI_CONTAINER_IMAGE:-centos}${CI_CONTAINER_TAG:-8}
+  image: ${CI_CONTAINER_IMAGE:-centos}:${CI_CONTAINER_TAG:-8}
   command: /lib/systemd/systemd
   docker_networks:
   - name: molecule-internal
@@ -33,7 +33,7 @@ platforms:
   capabilities:
   - SYS_ADMIN
   # privileged: ${CI_CONTAINER_PRIVILEGED:-false}
-  privileged: true
+  privileged: false
   pre_build_image: ${CI_CONTAINER_PREBUILT:-false}
   tty: true
   groups:

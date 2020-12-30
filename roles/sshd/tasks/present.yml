@@ -9,6 +9,13 @@
 - name: sshd is configured
   block:
 
+  - name: global directory for authorized_keys is present
+    file:
+      path: /etc/ssh/authorized_keys
+      state: directory
+      mode: 00755
+    when: sshd_global_authorized_keys
+
   - name: sshd_config.d is present
     file:
       path: "{{ sshd_config_d }}"
@@ -19,7 +26,7 @@
 
   - name: sshd main config is present
     template:
-      src: sshd_config.j2
+      src: "{{ sshd_config_template }}"
       dest: /etc/ssh/sshd_config
       mode: 00640
     notify: reload sshd

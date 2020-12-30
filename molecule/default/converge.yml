@@ -1,7 +1,7 @@
 # vim: set ft=yaml ts=2 expandtab:
 ---
 
-- name: Converge
+- name: converge clients
   hosts: proxy_group
 
   environment:
@@ -21,7 +21,8 @@
       path: /tmp/id_rsa
       type: rsa
 
-- name: Converge
+
+- name: converge servers
   hosts: all,!infrastructure_group
 
   environment:
@@ -30,6 +31,10 @@
 
   roles:
   - role: mafalb.openssh.sshd
+    sshd_global_authorized_keys: true
+    sshd_config_template: sshd_config.j2
+    sftponly_group_matches:
+    - sftpchroot
 
   tasks:
 
@@ -51,10 +56,75 @@
 
     - name: authorized_keys is present
       authorized_key:
-        user: "{{ item }}"
+        user: testssh1
         key: "{{ _public_key.stdout }}"
+
+    - name: global authorized_keys is present
+      authorized_key:
+        user: testssh2
+        key: "{{ _public_key.stdout }}"
+        path: /etc/ssh/authorized_keys/testssh2
+        manage_dir: false
+
+  - block:
+
+    - name: group for chrooted sftp users is present
+      group:
+        name: sftpchroot
+
+    - name: groups are present
+      group:
+        name: "{{ item }}"
       loop:
-      - testssh1
-      - testssh2
+      - testsftp1
+      - testsftp2
+
+    - name: home directories are present
+      file:
+        path: /home/{{ item }}
+        state: directory
+        owner: root
+        group: "{{ item }}"
+        mode: 00750
+      loop:
+      - testsftp1
+      - testsftp2
+
+    - name: testfile is present
+      copy:
+        content: testfile
+        dest: /home/{{ item }}/1_testfile
+        mode: 00644
+      loop:
+      - testsftp1
+      - testsftp2
+
+    - name: user is present
+      user:
+        name: "{{ item }}"
+        create_home: false
+        group: "{{ item }}"
+        groups:
+        - sftpchroot
+      loop:
+      - testsftp1
+      - testsftp2
+
+  - name: authorized_keys is present
+    include_role:
+      name: mafalb.openssh.authorized_keys
+    vars:
+      user: root
+      group: testsftp1
+      keys: "{{ [ _public_key.stdout ] }}"
+      path: /home/testsftp1/.ssh/authorized_keys
+      mode: '640'
+
+  - name: authorized_keys is present
+    authorized_key:
+      user: testsftp2
+      key: "{{ _public_key.stdout }}"
+      path: /etc/ssh/authorized_keys/testsftp2
+      manage_dir: false
 
 ...

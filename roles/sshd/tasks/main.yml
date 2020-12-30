@@ -15,6 +15,7 @@
     - sshd_packages is defined
     - sshd_service is defined
     - sshd_state in [ 'present', 'absent' ]
+    - sshd_config|type_debug == 'dict'
 
 - name: include_tasks for {{ sshd_state }}
   include_tasks: "{{ sshd_state }}.yml"

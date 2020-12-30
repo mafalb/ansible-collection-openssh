@@ -1,0 +1,36 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+- debug: var=mode|type_debug
+  tags:
+  - never
+  - debug
+
+- name: assertions
+  assert:
+    that:
+    - mode|type_debug == 'AnsibleUnicode'
+    - path is defined
+    - user is defined
+
+- name: .ssh directory is present
+  file:
+    path: "{{ path.split('/')[:-1]|join('/') }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ group|default(user) }}"
+    mode: "{{ directory_mode|default(mode|int(8) + 00110) }}"
+    setype: ssh_home_t
+  when: manage_dir is true
+
+- name: authorized_keys is present
+  template:
+    src: authorized_keys.j2
+    dest: "{{ path }}"
+    owner: "{{ user }}"
+    group: "{{ group|default(user) }}"
+    mode: "{{ mode }}"
+    setype: ssh_home_t
+    backup: true
+
+...

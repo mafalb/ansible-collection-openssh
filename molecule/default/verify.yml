@@ -4,11 +4,84 @@
 - name: Verify
   hosts: all,!infrastructure_group
 
+  module_defaults:
+    shell:
+      executable: /bin/bash
+
   tasks:
 
   - name: ssh login is possible
     delegate_to: ci-proxy
     command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh1@{{ inventory_hostname }} /bin/true
     changed_when: false
+
+  - name: ssh login is possible (global authorized_keys)
+    delegate_to: ci-proxy
+    command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh2@{{ inventory_hostname }} /bin/true
+    changed_when: false
+
+  - name: sftp login is possible 1
+    delegate_to: ci-proxy
+    shell: |
+      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
+      ls
+      SFTP
+    changed_when: false
+    register: _sftp_1
+
+  - name: sftp login is possible 2
+    delegate_to: ci-proxy
+    shell: |
+      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
+      cd ..
+      ls
+      SFTP
+    changed_when: false
+    register: _sftp_2
+
+  - name: sftp login is possible 3
+    delegate_to: ci-proxy
+    shell: |
+      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
+      pwd
+      SFTP
+    changed_when: false
+    register: _sftp_3
+
+  - debug: var=_sftp_3.stdout_lines[-1]
+
+  - name: assert that we are chrooted
+    assert:
+      that:
+      - _sftp_1.stdout_lines[-1] is match('1_testfile')
+      - _sftp_1.stdout_lines[-1] == _sftp_2.stdout_lines[-1]
+      # the following is odd, but ansible 2.9 interpreted
+      # directory: /
+      # as dictionary
+      # The error was: unhashable type: 'dict'
+      - _sftp_3.stdout_lines[-1] == 'Remote working directory' + ':' + ' /'
+
+  - name: sftp login is possible (global authorized_keys)
+    delegate_to: ci-proxy
+    shell: |
+      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp2@{{ inventory_hostname }} <<SFTP
+      SFTP
+    changed_when: false
+
+
+  - name: .ssh is not writable # noqa 305
+    shell: su - testsftp1 -c "test ! -w .ssh"
+    changed_when: false
+    check_mode: false
+
+  - name: authorized_keys is readable # noqa 305
+    shell: su - testsftp1 -c "test -r .ssh/authorized_keys"
+    changed_when: false
+    check_mode: false
+
+  - name: autorized_keys is not writable # noqa 305
+    shell: su - testsftp1 -c "test ! -w .ssh/authorized_keys"
+    changed_when: false
+    check_mode: false
 
 ...

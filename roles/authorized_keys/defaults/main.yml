@@ -1,0 +1,7 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+mode: 00600
+manage_dir: true
+
+...
