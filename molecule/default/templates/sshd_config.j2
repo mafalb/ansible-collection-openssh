@@ -1,7 +1,7 @@
 {% extends "mafalb.openssh.sshd_config.j2" %}
 {% block Matches %}
-{% if sftponly_group_matches is defined %}
-{% for match in sftponly_group_matches %}
+{% if sftponly_groups is defined %}
+{% for match in sftponly_groups %}
 Match Group {{ match }}
 	ChrootDirectory %h
 	ForceCommand internal-sftp -f AUTH -l VERBOSE

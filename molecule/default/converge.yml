@@ -33,7 +33,7 @@
   - role: mafalb.openssh.sshd
     sshd_global_authorized_keys: true
     sshd_config_template: sshd_config.j2
-    sftponly_group_matches:
+    sftponly_groups:
     - sftpchroot
 
   tasks:
