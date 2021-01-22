@@ -58,11 +58,7 @@ PermitRootLogin {{ sshd_config.PermitRootLogin }}
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
 # but this is overridden so installations will only check .ssh/authorized_keys
-{% if sshd_global_authorized_keys %}
-AuthorizedKeysFile /etc/ssh/authorized_keys/%u .ssh/authorized_keys
-{% else %}
-AuthorizedKeysFile .ssh/authorized_keys
-{% endif %}
+AuthorizedKeysFile {{ sshd_config.AuthorizedKeysFile }}
 
 #AuthorizedPrincipalsFile none
 
@@ -94,7 +90,7 @@ ChallengeResponseAuthentication no
 #KerberosUseKuserok yes
 
 # GSSAPI options
-GSSAPIAuthentication yes
+GSSAPIAuthentication {{ sshd_config.GSSAPIAuthentication }}
 GSSAPICleanupCredentials no
 #GSSAPIStrictAcceptorCheck yes
 #GSSAPIKeyExchange no

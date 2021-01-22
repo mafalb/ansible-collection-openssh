@@ -1,4 +1,22 @@
 # vim: set ft=yaml ts=2 expandtab:
+
+# This file is part of ansible-collection-openssh
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+#
+# ansible-collection-openssh is free software: you can redistribute it 
+# and/or modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# ansible-collection-openssh is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ansible-collection-openssh.
+# If not, see <https://www.gnu.org/licenses/>.
+
 ---
 
 - name: sshd is present
@@ -9,12 +27,11 @@
 - name: sshd is configured
   block:
 
-  - name: global directory for authorized_keys is present
+  - name: directory for global authorized_keys is present
     file:
       path: /etc/ssh/authorized_keys
       state: directory
       mode: 00755
-    when: sshd_global_authorized_keys
 
   - name: sshd_config.d is present
     file:

@@ -1,4 +1,22 @@
 # vim: set ft=yaml ts=2 expandtab:
+
+# This file is part of ansible-collection-openssh
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+#
+# ansible-collection-openssh is free software: you can redistribute it 
+# and/or modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# ansible-collection-openssh is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ansible-collection-openssh.
+# If not, see <https://www.gnu.org/licenses/>.
+
 ---
 
 - name: Verify
@@ -12,18 +30,13 @@
 
   - name: ssh login is possible
     delegate_to: ci-proxy
-    command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh1@{{ inventory_hostname }} /bin/true
-    changed_when: false
-
-  - name: ssh login is possible (global authorized_keys)
-    delegate_to: ci-proxy
-    command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh2@{{ inventory_hostname }} /bin/true
+    command: ssh -i /tmp/id_rsa_user -o StrictHostKeyChecking=no testssh1@{{ inventory_hostname }} /bin/true
     changed_when: false
 
   - name: sftp login is possible 1
     delegate_to: ci-proxy
     shell: |
-      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
+      sftp -o IdentityFile=/tmp/id_rsa_user -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
       ls
       SFTP
     changed_when: false
@@ -32,7 +45,7 @@
   - name: sftp login is possible 2
     delegate_to: ci-proxy
     shell: |
-      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
+      sftp -o IdentityFile=/tmp/id_rsa_user -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
       cd ..
       ls
       SFTP
@@ -42,13 +55,11 @@
   - name: sftp login is possible 3
     delegate_to: ci-proxy
     shell: |
-      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
+      sftp -o IdentityFile=/tmp/id_rsa_user -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
       pwd
       SFTP
     changed_when: false
     register: _sftp_3
-
-  - debug: var=_sftp_3.stdout_lines[-1]
 
   - name: assert that we are chrooted
     assert:
@@ -64,23 +75,28 @@
   - name: sftp login is possible (global authorized_keys)
     delegate_to: ci-proxy
     shell: |
-      sftp -o IdentityFile=/tmp/id_rsa -o StrictHostKeyChecking=no testsftp2@{{ inventory_hostname }} <<SFTP
+      sftp -o IdentityFile=/tmp/id_rsa_admin -o StrictHostKeyChecking=no testsftp1@{{ inventory_hostname }} <<SFTP
       SFTP
     changed_when: false
 
-
-  - name: .ssh is not writable # noqa 305
-    shell: su - testsftp1 -c "test ! -w .ssh"
+  - name: .ssh is not writable
+    become: true
+    become_user: testsftp1
+    command: test ! -w ~/.ssh
     changed_when: false
     check_mode: false
 
-  - name: authorized_keys is readable # noqa 305
-    shell: su - testsftp1 -c "test -r .ssh/authorized_keys"
+  - name: authorized_keys is readable
+    become: true
+    become_user: testsftp1
+    command: test -r ~/.ssh/authorized_keys
     changed_when: false
     check_mode: false
 
-  - name: autorized_keys is not writable # noqa 305
-    shell: su - testsftp1 -c "test ! -w .ssh/authorized_keys"
+  - name: autorized_keys is not writable
+    become: true
+    become_user: testsftp1
+    command: test ! -w ~/.ssh/authorized_keys
     changed_when: false
     check_mode: false
 

@@ -39,4 +39,3 @@ Ansible role mafalb.openssh.authorized_keys
 ## License
 
 GPLv3
-
