@@ -16,15 +16,13 @@ you could write a custom template that extends the base template from the role w
 ```jinja2
 {% extends "mafalb.openssh.sshd_config.j2" %}
 {% block Matches %}
-{% if sftponly_group_matches is defined %}
-{% for match in sftponly_group_matches %}
-Match Group {{ match }}
+{% if sftponly_group is defined %}
+Match Group {{ sftponly_group }}
         ChrootDirectory %h
         ForceCommand internal-sftp -f AUTH -l VERBOSE
         AllowTcpForwarding no
         X11Forwarding no
         PermitTTY no
-{% endfor %}
 {% endif %}
 {% endblock %}
 ```
@@ -37,13 +35,12 @@ and then you would use it like
   roles:
   - role: mafalb.openssh.sshd
     sshd_config_template: test.conf.j2
-    sftponly_group_matches:
-    - "*,!root,!wheel"
+    sftponly_group: whatevergroup
 ```
 
 also note that if you do not extend the template you can specify a completely standalone config file/template
 
-you can also remove openssh
+you can also remove openssh if you want.
 
 ```yaml
 - name: remove sshd
