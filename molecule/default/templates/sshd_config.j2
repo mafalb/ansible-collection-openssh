@@ -1,13 +1,12 @@
 {% extends "mafalb.openssh.sshd_config.j2" %}
 {% block Matches %}
-{% if sftponly_group_matches is defined %}
-{% for match in sftponly_group_matches %}
-Match Group {{ match }}
+{% if sftponly_group is defined %}
+Match Group {{ sftponly_group }}
 	ChrootDirectory %h
+        AuthorizedKeysFile /etc/ssh/authorized_keys/{{ sftponly_group }} .ssh/authorized_keys
 	ForceCommand internal-sftp -f AUTH -l VERBOSE
 	AllowTcpForwarding no
 	X11Forwarding no
 	PermitTTY no
-{% endfor %}
 {% endif %}
 {% endblock %}

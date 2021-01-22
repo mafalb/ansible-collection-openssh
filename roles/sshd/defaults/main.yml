@@ -10,6 +10,7 @@ sshd_config:
   PasswordAuthentication: 'no'
   X11Forwarding: 'no'
   GSSAPIAuthentication: 'no'
+  AuthorizedKeysFile: .ssh/authorized_keys
 
 sshd_global_authorized_keys: false
 

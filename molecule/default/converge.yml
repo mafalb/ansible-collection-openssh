@@ -16,9 +16,14 @@
     package:
       name: openssh-clients
 
-  - name: ssh key is present
+  - name: ssh user key is present
     openssh_keypair:
-      path: /tmp/id_rsa
+      path: /tmp/id_rsa_user
+      type: rsa
+
+  - name: ssh admin key is present
+    openssh_keypair:
+      path: /tmp/id_rsa_admin
       type: rsa
 
 
@@ -30,43 +35,41 @@
     https_proxy: http://ci-proxy:3128
 
   roles:
+
   - role: mafalb.openssh.sshd
-    sshd_global_authorized_keys: true
     sshd_config_template: sshd_config.j2
-    sftponly_group_matches:
-    - sftpchroot
+    sftponly_group: sftpchroot
 
   tasks:
 
-  - name: get public key
+  - name: get public admin key
     delegate_to: ci-proxy
-    command: cat /tmp/id_rsa.pub
+    command: cat /tmp/id_rsa_admin.pub
     changed_when: false
-    register: _public_key
+    register: _public_key_admin
     run_once: true
 
-  - block:
+  - name: get public user key
+    delegate_to: ci-proxy
+    command: cat /tmp/id_rsa_user.pub
+    changed_when: false
+    register: _public_key_user
+    run_once: true
+
+  - name: user for ssh is present
+    block:
 
     - name: user is present
       user:
-        name: "{{ item }}"
-      loop:
-      - testssh1
-      - testssh2
+        name: testssh1
 
     - name: authorized_keys is present
       authorized_key:
         user: testssh1
-        key: "{{ _public_key.stdout }}"
+        key: "{{ _public_key_user.stdout }}"
 
-    - name: global authorized_keys is present
-      authorized_key:
-        user: testssh2
-        key: "{{ _public_key.stdout }}"
-        path: /etc/ssh/authorized_keys/testssh2
-        manage_dir: false
-
-  - block:
+  - name: user for chrooted sftp is present
+    block:
 
     - name: group for chrooted sftp users is present
       group:
@@ -90,14 +93,6 @@
       - testsftp1
       - testsftp2
 
-    - name: testfile is present
-      copy:
-        content: testfile
-        dest: /home/{{ item }}/1_testfile
-        mode: 00644
-      loop:
-      - testsftp1
-      - testsftp2
 
     - name: user is present
       user:
@@ -110,21 +105,33 @@
       - testsftp1
       - testsftp2
 
-  - name: authorized_keys is present
+  - name: authorized_keys for admin is present
+    include_role:
+      name: mafalb.openssh.authorized_keys
+    vars:
+      group: sftpchroot
+      keys: "{{ [ _public_key_admin.stdout ] }}"
+      path: /etc/ssh/authorized_keys/sftpchroot
+      manage_dir: false
+      mode: '640'
+
+  - name: authorized_keys for testsftp1 is present
     include_role:
       name: mafalb.openssh.authorized_keys
     vars:
       user: root
       group: testsftp1
-      keys: "{{ [ _public_key.stdout ] }}"
+      keys: "{{ [ _public_key_user.stdout ] }}"
       path: /home/testsftp1/.ssh/authorized_keys
       mode: '640'
 
-  - name: authorized_keys is present
-    authorized_key:
-      user: testsftp2
-      key: "{{ _public_key.stdout }}"
-      path: /etc/ssh/authorized_keys/testsftp2
-      manage_dir: false
+  - name: testfile is present
+    copy:
+      content: testfile
+      dest: /home/{{ item }}/1_testfile
+      mode: 00644
+    loop:
+    - testsftp1
+    - testsftp2
 
 ...
