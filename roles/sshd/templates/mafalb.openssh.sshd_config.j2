@@ -94,7 +94,7 @@ ChallengeResponseAuthentication no
 #KerberosUseKuserok yes
 
 # GSSAPI options
-GSSAPIAuthentication yes
+GSSAPIAuthentication {{ sshd_config.GSSAPIAuthentication }}
 GSSAPICleanupCredentials no
 #GSSAPIStrictAcceptorCheck yes
 #GSSAPIKeyExchange no
