@@ -11,7 +11,7 @@
     that:
     - mode|type_debug == 'AnsibleUnicode'
     - path is defined
-    - user is defined
+    - user is defined or group is defined
 
 - name: .ssh directory is present
   file:
@@ -27,9 +27,9 @@
   template:
     src: authorized_keys.j2
     dest: "{{ path }}"
-    owner: "{{ user }}"
-    group: "{{ group|default(user) }}"
-    mode: "{{ mode }}"
+    owner: "{{ user|default(omit) }}"
+    group: "{{ group|default(omit) }}"
+    mode: "{{ mode|default(omit) }}"
     setype: ssh_home_t
     backup: true
 
