@@ -19,24 +19,17 @@
 
 ---
 
-- name: get OS specific variables
-  with_first_found:
-  - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-  - "{{ ansible_os_family }}.yml"
-  include_vars:
-    file: "{{ item }}"
+sshd_default_config:
+  PermitRootLogin: 'without-password'
+  PasswordAuthentication: 'no'
+  X11Forwarding: 'no'
+  GSSAPIAuthentication: 'no'
+  AuthorizedKeysFile: .ssh/authorized_keys
+  justForCI: 'true'
 
-- name: assertions
-  assert:
-    that:
-    - sshd_packages is defined
-    - sshd_service is defined
-    - sshd_state in [ 'present', 'absent' ]
-    - sshd_config|type_debug == 'dict'
-    - sshd.cfg|type_debug == 'dict'
+sshd:
+  cfg: "{{ sshd_default_config|combine(sshd_config) }}"
 
-- name: include_tasks for {{ sshd_state }}
-  include_tasks: "{{ sshd_state }}.yml"
+sshd_validate: sshd -f %s -T -C user=gugu
 
 ...

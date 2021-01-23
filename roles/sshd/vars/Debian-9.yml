@@ -28,4 +28,6 @@ sftp_subsystem: /usr/lib/openssh/sftp-server
 
 sshd_config_has_global_include: false
 
+sshd_missing_runtime_dir: true
+
 ...
