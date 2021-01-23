@@ -22,14 +22,8 @@
 sshd_state: present
 sshd_config_d: /etc/ssh/sshd_config.d
 sshd_config_template: mafalb.openssh.sshd_config.j2
-
-sshd_config:
-  PermitRootLogin: prohibit-password
-  PasswordAuthentication: 'no'
-  X11Forwarding: 'no'
-  GSSAPIAuthentication: 'no'
-  AuthorizedKeysFile: .ssh/authorized_keys
-
 sshd_global_authorized_keys: false
+
+# config defaults in vars/main.yml
 
 ...

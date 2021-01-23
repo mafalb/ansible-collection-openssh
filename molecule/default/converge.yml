@@ -57,6 +57,9 @@
   - role: mafalb.openssh.sshd
     sshd_config_template: sshd_config.j2
     sftponly_group: sftpchroot
+    sshd_config:
+      PermitRootLogin: without-password
+      PasswordAuthentication: 'no'
 
   tasks:
 

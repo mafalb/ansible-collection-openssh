@@ -19,6 +19,15 @@
 
 ---
 
+- debug: var=sshd.cfg
+  tags:
+  - never
+  - debug
+
+- name: default config values are merged
+  assert:
+    that: sshd.cfg.justForCI|bool
+
 - name: sshd is present
   package:
     name: "{{ sshd_extra_packages|default([]) + sshd_packages }}"
@@ -41,12 +50,47 @@
     notify: reload sshd
     when: sshd_config_has_global_include
 
+  # RedHat only:
+  #
+  # if the keys does not exist yet
+  # the validation of sshd_config in the next task would fail
+  # so generate the keys manually
+  #
+  - name: hostkeys are generated
+    service:
+      name: "{{ sshd_keygen_service }}"
+      state: started
+    when: ansible_os_family == 'RedHat'
+
+  # similar situation on Debian
+  # validation fails with
+  #
+  # Missing privilege separation directory: /run/sshd
+  #
+  - name: privilege separation directory
+    file:
+      path: /run/sshd
+      state: directory
+      mode: '755'
+      force: false
+    when: sshd_missing_runtime_dir is defined
+    register: _runtime_dir
+
   - name: sshd main config is present
     template:
       src: "{{ sshd_config_template }}"
       dest: /etc/ssh/sshd_config
-      mode: 00640
+      validate: "{{ sshd_validate }}"
+      mode: '644'
     notify: reload sshd
+
+  - name: remove privilege separation directory again
+    file:
+      path: /run/sshd
+      state: absent
+    when:
+    - sshd_missing_runtime_dir is defined
+    - _runtime_dir.changed|bool
 
 - name: sshd is started
   service:

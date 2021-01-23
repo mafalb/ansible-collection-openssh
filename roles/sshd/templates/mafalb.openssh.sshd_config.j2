@@ -49,7 +49,7 @@ SyslogFacility AUTHPRIV
 # Authentication:
 
 #LoginGraceTime 2m
-PermitRootLogin {{ sshd_config.PermitRootLogin }}
+PermitRootLogin {{ sshd.cfg.PermitRootLogin }}
 #StrictModes yes
 #MaxAuthTries 6
 #MaxSessions 10
@@ -58,7 +58,7 @@ PermitRootLogin {{ sshd_config.PermitRootLogin }}
 
 # The default is to check both .ssh/authorized_keys and .ssh/authorized_keys2
 # but this is overridden so installations will only check .ssh/authorized_keys
-AuthorizedKeysFile {{ sshd_config.AuthorizedKeysFile }}
+AuthorizedKeysFile {{ sshd.cfg.AuthorizedKeysFile }}
 
 #AuthorizedPrincipalsFile none
 
@@ -76,7 +76,7 @@ AuthorizedKeysFile {{ sshd_config.AuthorizedKeysFile }}
 # To disable tunneled clear text passwords, change to no here!
 #PasswordAuthentication yes
 #PermitEmptyPasswords no
-PasswordAuthentication {{ sshd_config.PasswordAuthentication }}
+PasswordAuthentication {{ sshd.cfg.PasswordAuthentication }}
 
 # Change to no to disable s/key passwords
 #ChallengeResponseAuthentication yes
@@ -90,7 +90,7 @@ ChallengeResponseAuthentication no
 #KerberosUseKuserok yes
 
 # GSSAPI options
-GSSAPIAuthentication {{ sshd_config.GSSAPIAuthentication }}
+GSSAPIAuthentication {{ sshd.cfg.GSSAPIAuthentication }}
 GSSAPICleanupCredentials no
 #GSSAPIStrictAcceptorCheck yes
 #GSSAPIKeyExchange no
@@ -112,7 +112,7 @@ UsePAM yes
 #AllowAgentForwarding yes
 #AllowTcpForwarding yes
 #GatewayPorts no
-X11Forwarding {{ sshd_config.X11Forwarding }}
+X11Forwarding {{ sshd.cfg.X11Forwarding }}
 #X11DisplayOffset 10
 #X11UseLocalhost yes
 #PermitTTY yes
