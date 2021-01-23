@@ -73,7 +73,7 @@
       state: directory
       mode: '755'
       force: false
-    when: sshd_missing_runtime_dir|bool
+    when: sshd_missing_runtime_dir is defined
     register: _runtime_dir
 
   - name: sshd main config is present
