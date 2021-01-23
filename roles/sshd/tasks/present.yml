@@ -58,7 +58,7 @@
   #
   - name: hostkeys are generated
     service:
-      name: sshd-keygen.target
+      name: "{{ sshd_keygen_service }}"
       state: started
     when: ansible_os_family == 'RedHat'
 
