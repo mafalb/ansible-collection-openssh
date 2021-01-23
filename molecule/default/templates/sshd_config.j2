@@ -16,6 +16,11 @@
 {# If not, see <https://www.gnu.org/licenses/>. #}
 
 {% extends "mafalb.openssh.sshd_config.j2" %}
+
+{% block Global %}
+# just to test the functionality
+{% endblock %}
+
 {% block Matches %}
 {% if sftponly_group is defined %}
 Match Group {{ sftponly_group }}
@@ -26,4 +31,5 @@ Match Group {{ sftponly_group }}
 	X11Forwarding no
 	PermitTTY no
 {% endif %}
+
 {% endblock %}
