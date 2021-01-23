@@ -71,7 +71,8 @@
     file:
       path: /run/sshd
       state: directory
-      mode: '0755'
+      mode: '755'
+      force: false
     when: sshd_missing_runtime_dir|bool
     register: _runtime_dir
 
@@ -79,8 +80,8 @@
     template:
       src: "{{ sshd_config_template }}"
       dest: /etc/ssh/sshd_config
-      mode: 00640
       validate: "{{ sshd_validate }}"
+      mode: '644'
     notify: reload sshd
 
   - name: remove privilege separation directory again
@@ -88,7 +89,7 @@
       path: /run/sshd
       state: absent
     when:
-    - sshd_missing_runtime_dir|bool
+    - sshd_missing_runtime_dir is defined
     - _runtime_dir.changed|bool
 
 - name: sshd is started
