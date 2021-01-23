@@ -30,6 +30,6 @@ sshd_default_config:
 sshd:
   cfg: "{{ sshd_default_config|combine(sshd_config) }}"
 
-sshd_validate: sshd -f %s -T -C user=gugu
+sshd_validate: sshd -f %s -T -C user=gugu -C host=localhost -C addr=localhost
 
 ...
