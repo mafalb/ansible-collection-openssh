@@ -39,7 +39,7 @@
     group: "{{ group|default(user) }}"
     mode: "{{ directory_mode|default(mode|int(8) + 00110) }}"
     setype: ssh_home_t
-  when: manage_dir is true
+  when: manage_dir|bool
 
 - name: authorized_keys is present
   template:
