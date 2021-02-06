@@ -109,6 +109,7 @@ jobs:
         path: ansible_collections/mafalb/openssh
 
     - name: checkout mafalb.ansible
+      if: false
       uses: actions/checkout@v2
       with:
         repository: mafalb/ansible-collection-ansible
@@ -116,6 +117,7 @@ jobs:
         path: ansible_collections/mafalb/ansible
 
     - name: mv ansible
+      if: false
       run: |
         mkdir -p ~/.ansible/collections/ansible_collections/mafalb
         mv ../ansible ~/.ansible/collections/ansible_collections/mafalb/
