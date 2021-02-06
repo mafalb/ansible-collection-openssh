@@ -5,6 +5,7 @@
 ### Changes
 
 - Global block in sshd_config template
+- work on CI
 
 ## v0.0.2 2021-01-23
 
