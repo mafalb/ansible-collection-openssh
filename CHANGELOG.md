@@ -1,11 +1,12 @@
 # Changelog
 
-## v0.0.3 XXXX-XX-XX
+## v0.0.3 2021-02-06
 
 ### Changes
 
 - Global block in sshd_config template
 - work on CI
+- fix an internal bug: do not use 'is true' tests (available only in newest jinja2)
 
 ## v0.0.2 2021-01-23
 
