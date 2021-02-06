@@ -108,20 +108,6 @@ jobs:
       with:
         path: ansible_collections/mafalb/openssh
 
-    - name: checkout mafalb.ansible
-      if: false
-      uses: actions/checkout@v2
-      with:
-        repository: mafalb/ansible-collection-ansible
-        ref: dev
-        path: ansible_collections/mafalb/ansible
-
-    - name: mv ansible
-      if: false
-      run: |
-        mkdir -p ~/.ansible/collections/ansible_collections/mafalb
-        mv ../ansible ~/.ansible/collections/ansible_collections/mafalb/
-
     - name: get mafalb.ansible
       run: ansible-galaxy collection install mafalb.ansible
 
