@@ -30,4 +30,7 @@ sshd_config_has_global_include: false
 
 sshd_missing_runtime_dir: true
 
+sshd_gssapiauth: 'no'
+sshd_syslogfacility: AUTH
+
 ...

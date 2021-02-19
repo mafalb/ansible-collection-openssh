@@ -1,9 +1,8 @@
-# vim: set ft=yaml ts=2 expandtab:
-
+{#
 # This file is part of ansible-collection-openssh
 # Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
 #
-# ansible-collection-openssh is free software: you can redistribute it 
+# ansible-collection-openssh is free software: you can redistribute it   
 # and/or modify it under the terms of the GNU General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
@@ -16,21 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with ansible-collection-openssh.
 # If not, see <https://www.gnu.org/licenses/>.
+-#}
 
----
+{%- macro directive(key, value) -%}
+{% if value|type_debug == 'list' %}
 
-sshd_packages:
-- openssh-server
-
-sshd_extra_packages:
-- initscripts
-
-sshd_service: sshd
-sshd_keygen_service: sshd-keygen.target
-sftp_subsystem: /usr/libexec/openssh/sftp-server
-
-sshd_config_has_global_include: true
-sshd_gssapiauth: 'yes'
-sshd_syslogfacility: AUTHPRIV
-
-...
+{% for v in value -%}
+{{ key }} {{ v }}
+{% endfor -%}
+{% else -%}
+{{ key }} {{ value }}
+{%- endif -%}
+{% endmacro -%}

@@ -24,10 +24,6 @@
   - never
   - debug
 
-- name: default config values are merged
-  assert:
-    that: sshd.cfg.justForCI|bool
-
 - name: sshd is present
   package:
     name: "{{ sshd_extra_packages|default([]) + sshd_packages }}"
