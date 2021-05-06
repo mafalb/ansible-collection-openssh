@@ -108,6 +108,9 @@ jobs:
       with:
         path: ansible_collections/mafalb/openssh
 
+    - name: install system ansible
+      run: sudo apt-get install ansible
+
     - name: get mafalb.ansible
       run: ansible-galaxy collection install mafalb.ansible
 
