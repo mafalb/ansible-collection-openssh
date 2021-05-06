@@ -115,7 +115,7 @@ jobs:
       run: ansible-galaxy collection install mafalb.ansible
 
     - name: install molecule
-      run: ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+      run: /usr/bin/ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
 
     - name: check ansible version
       run: |
