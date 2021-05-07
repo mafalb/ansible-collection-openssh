@@ -19,7 +19,8 @@
 
 ---
 
-- debug: var=sshd.cfg
+- name: debug sshd.cfg
+  debug: var=sshd.cfg
   tags:
   - never
   - debug
