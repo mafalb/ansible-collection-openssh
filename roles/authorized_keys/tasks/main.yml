@@ -19,7 +19,8 @@
 
 ---
 
-- debug: var=mode|type_debug
+- name: debug mode
+  debug: var=mode|type_debug
   tags:
   - never
   - debug
