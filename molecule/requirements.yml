@@ -1,0 +1,13 @@
+# vim: set ft=yaml ts=2 expandtab:
+---
+
+collections:
+
+# does only work with ansible 2.10
+#- name: https://github.com/mafalb/ansible-collection-ansible.git
+#  type: git
+#  version: v2
+
+- name: mafalb.ansible
+
+...

@@ -114,6 +114,13 @@ jobs:
     - name: get mafalb.ansible
       run: ansible-galaxy collection install mafalb.ansible
 
+    # note: this uses ansible-galaxy from preinstalled ansible (2.10)
+    #
+    - name: install mafalb.ansible
+      run: ansible-galaxy collection install -r molecule/requirements.yml
+
+    # note: this uses ansible-playbook from system ansible
+    #
     - name: install molecule
       run: /usr/bin/ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
 
