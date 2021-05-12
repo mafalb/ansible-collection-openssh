@@ -108,21 +108,20 @@ jobs:
       with:
         path: ansible_collections/mafalb/openssh
 
+    # use the github actions ansible
+    #
     - name: get mafalb.ansible
       run: ansible-galaxy collection install mafalb.ansible
 
-    # note: this uses ansible-galaxy from preinstalled ansible (2.10)
-    #
-    - name: install mafalb.ansible
-      run: ansible-galaxy collection install -r molecule/requirements.yml
-
-    # note: this uses ansible-playbook from system ansible
+    # use the system ansible
     #
     - name: install molecule
       run: |
         sudo apt-get install ansible
-        /usr/bin/ansible-playbook -D molecule/install_molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
+        /usr/bin/ansible-playbook -D ~/.ansible/collections/ansible_collections/mafalb/ansible/playbooks/molecule.yml -e molecule_ansible_version=${{ matrix.ansible_version }} -t all,debug
 
+    # use our ansible
+    #
     - name: check ansible version
       run: |
         source ~/.virtualenvs/molecule/bin/activate
