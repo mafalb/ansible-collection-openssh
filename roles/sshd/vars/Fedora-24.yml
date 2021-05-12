@@ -30,5 +30,7 @@ sshd_keygen_service: sshd-keygen.target
 sftp_subsystem: /usr/libexec/openssh/sftp-server
 
 sshd_config_has_global_include: false
+sshd_gssapiauth: 'yes'
+sshd_syslogfacility: AUTHPRIV
 
 ...
