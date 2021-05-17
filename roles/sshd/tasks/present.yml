@@ -79,6 +79,7 @@
       dest: /etc/ssh/sshd_config
       validate: "{{ sshd_validate }}"
       mode: '644'
+      backup: true
     notify: reload sshd
 
   - name: remove privilege separation directory again
