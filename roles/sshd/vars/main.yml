@@ -32,6 +32,7 @@ sshd_default_config:
   UsePAM: 'yes'
   X11Forwarding: 'yes'
   GSSAPIAuthentication: "{{ sshd_gssapiauth }}"
+  GSSAPICleanupCredentials: 'no'
   PrintMotd: 'no'
   AcceptEnv:
   - LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
