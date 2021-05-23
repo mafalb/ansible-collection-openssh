@@ -82,14 +82,6 @@
       backup: true
     notify: reload sshd
 
-  - name: remove privilege separation directory again
-    file:
-      path: /run/sshd
-      state: absent
-    when:
-    - sshd_missing_runtime_dir is defined
-    - _runtime_dir.changed|bool
-
 - name: sshd is started
   service:
     name: "{{ sshd_service }}"
