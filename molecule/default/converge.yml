@@ -95,7 +95,7 @@
       register: _should_not_run
 
     rescue:
-    - name: 
+    - name: assert that previous role failed
       assert:
         that:
         - _should_have_failed is defined        
