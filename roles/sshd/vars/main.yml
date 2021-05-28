@@ -20,12 +20,26 @@
 ---
 
 sshd_default_config:
-  PermitRootLogin: 'without-password'
-  PasswordAuthentication: 'no'
-  X11Forwarding: 'no'
-  GSSAPIAuthentication: 'no'
-  AuthorizedKeysFile: .ssh/authorized_keys
-  justForCI: 'true'
+  HostKey:
+  - /etc/ssh/ssh_host_rsa_key
+  - /etc/ssh/ssh_host_ecdsa_key
+  - /etc/ssh/ssh_host_ed25519_key
+  SyslogFacility: "{{ sshd_syslogfacility }}"
+  PermitRootLogin: without-password
+  AuthorizedKeysFile: '.ssh/authorized_keys'
+  PasswordAuthentication: 'yes'
+  ChallengeResponseAuthentication: 'no'
+  UsePAM: 'yes'
+  X11Forwarding: 'yes'
+  GSSAPIAuthentication: "{{ sshd_gssapiauth }}"
+  GSSAPICleanupCredentials: 'no'
+  PrintMotd: 'no'
+  AcceptEnv:
+  - LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+  - LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+  - LC_IDENTIFICATION LC_ALL LANGUAGE
+  - XMODIFIERS
+  Subsystem: sftp {{ sftp_subsystem }}
 
 sshd:
   cfg: "{{ sshd_default_config|combine(sshd_config) }}"

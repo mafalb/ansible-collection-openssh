@@ -45,8 +45,8 @@
       type: rsa
 
 
-- name: converge servers
-  hosts: all,!infrastructure_group
+- name: converge server 1
+  hosts: one_match
 
   environment:
     http_proxy: http://ci-proxy:3128
@@ -55,11 +55,67 @@
   roles:
 
   - role: mafalb.openssh.sshd
-    sshd_config_template: sshd_config.j2
-    sftponly_group: sftpchroot
     sshd_config:
       PermitRootLogin: without-password
       PasswordAuthentication: 'no'
+      Match:
+      - 'Group sftpchroot':
+          ChrootDirectory: '%h'
+          AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
+          ForceCommand: internal-sftp
+
+- name: Match block that is not a list
+  hosts: one_match
+
+  environment:
+    http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
+
+  tasks:
+
+  - block:
+
+    - name: sshd with bad config
+      include_role:
+        name: mafalb.openssh.sshd
+      vars:
+        sshd_config:
+          PermitRootLogin: without-password
+          PasswordAuthentication: 'no'
+          Match:
+            'Group sftpchroot':
+              ChrootDirectory: '%h'
+              AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
+              ForceCommand: internal-sftp
+
+- name: converge server 2
+  hosts: two_matches
+
+  environment:
+    http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
+
+  roles:
+
+  - role: mafalb.openssh.sshd
+    sshd_config:
+      PermitRootLogin: without-password
+      PasswordAuthentication: 'no'
+      Match:
+      - 'Group sftpchroot':
+          ChrootDirectory: '%h'
+          AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
+          ForceCommand: internal-sftp
+      - 'Group sftpchroot2':
+          ChrootDirectory: '%h'
+          ForceCommand: internal-sftp
+
+- name: converge servers
+  hosts: ci
+
+  environment:
+    http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
 
   tasks:
 

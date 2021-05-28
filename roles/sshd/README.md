@@ -5,40 +5,36 @@ Ansible role mafalb.openssh.sshd
 ## Basic Usage
 
 ```yaml
-- name: install mafalb.openssh.sshd
+- name: default settings
   hosts: localhost
   roles:
   - role: mafalb.openssh.sshd
 ```
-
-you could write a custom template that extends the base template from the role with a block named "Matches", something like
-
-```jinja2
-{% extends "mafalb.openssh.sshd_config.j2" %}
-{% block Matches %}
-{% if sftponly_group is defined %}
-Match Group {{ sftponly_group }}
-        ChrootDirectory %h
-        ForceCommand internal-sftp -f AUTH -l VERBOSE
-        AllowTcpForwarding no
-        X11Forwarding no
-        PermitTTY no
-{% endif %}
-{% endblock %}
-```
-
-and then you would use it like
 
 ```yaml
-- name: install mafalb.openssh.sshd
+- name: pass a custom template
   hosts: localhost
   roles:
   - role: mafalb.openssh.sshd
-    sshd_config_template: test.conf.j2
-    sftponly_group: whatevergroup
+    sshd_config_template: /path/to/template.j2
 ```
 
-also note that if you do not extend the template you can specify a completely standalone config file/template
+or you can use the default template and pass sshd configuration as yaml
+
+```yaml
+- name: configuration as yaml
+  hosts: localhost
+  roles:
+  - role: mafalb.openssh.sshd
+    sshd_config:
+      PermitRootLogin: without-password
+      PasswordAuthentication: 'no'
+      Match:
+        'Group sftpchroot':
+          ChrootDirectory: '%h'
+          AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
+          ForceCommand: internal-sftp
+```
 
 you can also remove openssh if you want.
 

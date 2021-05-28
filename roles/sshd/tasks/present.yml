@@ -25,9 +25,13 @@
   - never
   - debug
 
-- name: default config values are merged
+- name: assert that Match is a list to avoid nasty jinja2 error
   assert:
-    that: sshd.cfg.justForCI|bool
+    that: sshd_config.Match|type_debug == 'list'
+    fail_msg: sshd_config.Match must be a list
+  when:
+  - sshd_config.Match is defined
+  - false
 
 - name: sshd is present
   package:
@@ -83,15 +87,8 @@
       dest: /etc/ssh/sshd_config
       validate: "{{ sshd_validate }}"
       mode: '644'
+      backup: true
     notify: reload sshd
-
-  - name: remove privilege separation directory again
-    file:
-      path: /run/sshd
-      state: absent
-    when:
-    - sshd_missing_runtime_dir is defined
-    - _runtime_dir.changed|bool
 
 - name: sshd is started
   service:
