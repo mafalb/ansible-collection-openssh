@@ -20,7 +20,7 @@
 ---
 
 - name: Verify
-  hosts: all,!infrastructure_group
+  hosts: ci
 
   module_defaults:
     shell:

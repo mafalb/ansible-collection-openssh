@@ -29,14 +29,17 @@ Include /etc/ssh/sshd_config.d/*.conf
 
 {% for directive in sshd.cfg|dict2items -%}
 {% if directive.key == 'Match' -%}
-{% for match in directive.value|dict2items %}
+{% for match_item in directive.value -%}
+{% for match in match_item|dict2items %}
 
 Match {{ match.key }}
 {% for match_directive in match.value|dict2items %}
     {{ sshd_macros.directive(match_directive.key, match_directive.value) }}
 {% endfor -%}    
+{% endfor %}
 {% endfor -%}
 {% else -%}
 {{ sshd_macros.directive(directive.key, directive.value) }}
 {% endif -%}
 {% endfor -%}
+

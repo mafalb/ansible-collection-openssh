@@ -45,8 +45,8 @@
       type: rsa
 
 
-- name: converge servers
-  hosts: all,!infrastructure_group
+- name: converge server 1
+  hosts: one_match
 
   environment:
     http_proxy: http://ci-proxy:3128
@@ -59,10 +59,76 @@
       PermitRootLogin: without-password
       PasswordAuthentication: 'no'
       Match:
-        'Group sftpchroot':
+      - 'Group sftpchroot':
           ChrootDirectory: '%h'
           AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
           ForceCommand: internal-sftp
+
+- name: Match that is not a list must fail
+  hosts: one_match
+
+  environment:
+    http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
+
+  tasks:
+
+  - block:
+
+    - name: sshd with bad config
+      include_role:
+        name: mafalb.openssh.sshd
+      vars:
+        sshd_config:
+          PermitRootLogin: without-password
+          PasswordAuthentication: 'no'
+          Match:
+            'Group sftpchroot':
+              ChrootDirectory: '%h'
+              AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
+              ForceCommand: internal-sftp
+      register: _should_have_failed
+
+    - name: this task should not be reached
+      fail:
+        msg: "Execution should have failed before this task"
+      register: _should_not_run
+
+    rescue:
+    - name: 
+      assert:
+        that:
+        - _should_have_failed is defined        
+        - _should_not_run is not defined
+
+- name: converge server 2
+  hosts: two_matches
+
+  environment:
+    http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
+
+  roles:
+
+  - role: mafalb.openssh.sshd
+    sshd_config:
+      PermitRootLogin: without-password
+      PasswordAuthentication: 'no'
+      Match:
+      - 'Group sftpchroot':
+          ChrootDirectory: '%h'
+          AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
+          ForceCommand: internal-sftp
+      - 'Group sftpchroot2':
+          ChrootDirectory: '%h'
+          ForceCommand: internal-sftp
+
+- name: converge servers
+  hosts: ci
+
+  environment:
+    http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
 
   tasks:
 

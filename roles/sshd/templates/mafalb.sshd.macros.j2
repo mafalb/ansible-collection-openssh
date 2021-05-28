@@ -17,6 +17,10 @@
 # If not, see <https://www.gnu.org/licenses/>.
 -#}
 
+{% macro abort(error) %}
+{{ ('')|mandatory(error) }}
+{% endmacro %}
+
 {%- macro directive(key, value) -%}
 {% if value|type_debug == 'list' %}
 
