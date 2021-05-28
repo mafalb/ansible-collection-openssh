@@ -96,6 +96,7 @@ jobs:
     env:
       
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
+      CI_REGISTRY: ${{ matrix.registry }}
       CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
       CI_CONTAINER_TAG: ${{ matrix.version }}
       PY_COLORS: 1
