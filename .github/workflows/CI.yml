@@ -27,23 +27,43 @@ jobs:
       matrix:
 
         target:
+        - fedora33
+        - fedora34
+        - c8s
+        - alma8
         - centos7
         - centos8
-        - oraclelinux7
-        - oraclelinux8
+        - debian9
+        - debian10
         - ubuntu-16.04
         - ubuntu-18.04
         - ubuntu-20.04
-        - fedora32
-        - fedora33
-        - debian9
-        - debian10
 
         ansible_version:
         - '2.9'
         - '2.10'
 
         include:
+
+        - target: fedora33
+          distribution: fedora
+          version: 33
+
+        - target: fedora34
+          distribution: fedora
+          version: 34
+
+        - target: c8s
+          distribution: centos
+          registry: "quay.io/centos/"
+          version: stream8
+
+        - target: alma8
+          distribution: almalinux
+          registry: "docker.io/almalinux/"
+          version: 8
+          test_molecule: true
+          test_controlnode: true
 
         - target: centos7
           distribution: centos
@@ -53,13 +73,13 @@ jobs:
           distribution: centos
           version: 8
 
-        - target: oraclelinux7
-          distribution: oraclelinux
-          version: 7
+        - target: debian9
+          distribution: debian
+          version: stretch
 
-        - target: oraclelinux8
-          distribution: oraclelinux
-          version: 8-slim
+        - target: debian10
+          distribution: debian
+          version: buster
 
         - target: ubuntu-16.04
           distribution: ubuntu
@@ -72,22 +92,6 @@ jobs:
         - target: ubuntu-20.04
           distribution: ubuntu
           version: focal
-
-        - target: fedora32
-          distribution: fedora
-          version: 32
-
-        - target: fedora33
-          distribution: fedora
-          version: 33
-
-        - target: debian9
-          distribution: debian
-          version: stretch
-
-        - target: debian10
-          distribution: debian
-          version: buster
 
     env:
       
