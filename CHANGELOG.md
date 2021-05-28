@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.0 2021-05-28
+
+### Changes
+
+- configuration via yaml is possible
+
 ## v0.0.3 2021-02-06
 
 ### Changes

@@ -64,7 +64,7 @@
           AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
           ForceCommand: internal-sftp
 
-- name: Match that is not a list must fail
+- name: Match block that is not a list
   hosts: one_match
 
   environment:
@@ -87,19 +87,6 @@
               ChrootDirectory: '%h'
               AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
               ForceCommand: internal-sftp
-      register: _should_have_failed
-
-    - name: this task should not be reached
-      fail:
-        msg: "Execution should have failed before this task"
-      register: _should_not_run
-
-    rescue:
-    - name: assert that previous role failed
-      assert:
-        that:
-        - _should_have_failed is defined        
-        - _should_not_run is not defined
 
 - name: converge server 2
   hosts: two_matches

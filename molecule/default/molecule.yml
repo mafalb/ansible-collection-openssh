@@ -61,6 +61,8 @@ platforms:
   - SYS_ADMIN
   # privileged: ${CI_CONTAINER_PRIVILEGED:-false}
   privileged: false
+  #security_opts:
+  #- seccomp=unconfined
   pre_build_image: ${CI_CONTAINER_PREBUILT:-false}
   tty: true
   groups:

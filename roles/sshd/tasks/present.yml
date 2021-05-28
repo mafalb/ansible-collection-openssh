@@ -29,7 +29,9 @@
   assert:
     that: sshd_config.Match|type_debug == 'list'
     fail_msg: sshd_config.Match must be a list
-  when: sshd_config.Match is defined
+  when:
+  - sshd_config.Match is defined
+  - false
 
 - name: sshd is present
   package:
