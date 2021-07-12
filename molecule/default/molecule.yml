@@ -22,6 +22,7 @@ platforms:
 - name: ${CI_HOSTNAME-"ci-rocky8"}
   image: ${CI_IMAGE:-"quay.io/rockylinux/rockylinux:8"}
   command: /lib/systemd/systemd
+  network_type: bridge
   docker_networks:
   - name: molecule-internal
     internal: true
@@ -46,6 +47,7 @@ platforms:
 - name: ci-proxy
   image: quay.io/centos/centos:8
   command: /lib/systemd/systemd
+  network_type: bridge
   docker_networks:
   - name: molecule-internal
     internal: true
