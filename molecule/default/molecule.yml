@@ -44,7 +44,7 @@ platforms:
   - ci
   - one_match
 
-- name: ${CI_HOSTNAME:-"ci-rocky8"}-2
+- name: ${CI_HOSTNAME:-ci-rocky8}-2
   image: ${CI_IMAGE:-"quay.io/rockylinux/rockylinux:8"}
   command: /lib/systemd/systemd
   network_type: bridge
