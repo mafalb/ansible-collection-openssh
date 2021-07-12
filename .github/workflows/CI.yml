@@ -119,7 +119,7 @@ jobs:
     - name: check ansible version
       run: |
         source ~/.virtualenvs/molecule/bin/activate
-        ansible --version | grep "^ansible ${{ matrix.ansible_version }}"
+        ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
 
     - name: molecule tests
       run: |
