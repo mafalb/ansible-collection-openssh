@@ -44,8 +44,8 @@ platforms:
   - ci
   - one_match
 
-- name: ci-proxy
-  image: quay.io/centos/centos:8
+- name: ${CI_HOSTNAME-"ci-rocky8"}-2
+  image: ${CI_IMAGE:-"quay.io/rockylinux/rockylinux:8"}
   command: /lib/systemd/systemd
   network_type: bridge
   docker_networks:
@@ -72,8 +72,9 @@ platforms:
   - two_matches
 
 - name: ci-proxy
-  image: centos:8
+  image: quay.io/centos/centos:8
   command: /lib/systemd/systemd
+  network_mode: bridge
   networks:
   - name: molecule-external
   - name: molecule-internal
