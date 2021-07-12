@@ -31,13 +31,14 @@ jobs:
         - fedora34
         - c8s
         - alma8
+        - rocky8
         - centos7
         - centos8
         - debian9
         - debian10
-        - ubuntu-16.04
-        - ubuntu-18.04
-        - ubuntu-20.04
+        - ubuntu16
+        - ubuntu18
+        - ubuntu20
 
         ansible_version:
         - '2.9'
