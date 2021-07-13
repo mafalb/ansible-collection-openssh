@@ -86,9 +86,8 @@ jobs:
     env:
       
       ANSIBLE_VERSION: ${{ matrix.ansible_version }}
-      CI_REGISTRY: ${{ matrix.registry }}
-      CI_CONTAINER_IMAGE: ${{ matrix.distribution }}
-      CI_CONTAINER_TAG: ${{ matrix.version }}
+      CI_IMAGE: ${{ matrix.image }}
+      CI_HOSTNAME: ci-${{ matrix.target }}
       PY_COLORS: 1
       ANSIBLE_FORCE_COLOR: 1
       
