@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.0 2021-07-13
+
+- add support for rocky
+
 ## v1.0.0 2021-05-28
 
 ### Changes
