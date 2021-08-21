@@ -4,6 +4,7 @@
 
 - add support for ArchLinux
 - CI on Debian 11 bullseye
+- CI on Arch
 
 ## v1.1.0 2021-07-13
 
