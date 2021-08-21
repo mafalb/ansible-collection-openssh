@@ -27,7 +27,6 @@ jobs:
       matrix:
 
         target:
-        - arch
         - fedora33
         - fedora34
         - c8s
