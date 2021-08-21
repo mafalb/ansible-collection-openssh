@@ -22,6 +22,7 @@ RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y pyth
     elif [ $(command -v dnf) ]; then touch /var/lib/rpm/* && dnf makecache && dnf --assumeyes install python3 sudo which systemd iproute;\
     elif [ $(command -v microdnf) ]; then touch /var/lib/rpm/* && microdnf install python3 sudo which systemd iproute yum && touch /etc/yum/vars/ociregion;\
     elif [ $(command -v yum) ]; then yum makecache fast && yum install -y python sudo which yum-plugin-ovl iproute && sed -i 's/plugins=0/plugins=1/g' /etc/yum.conf; \
+    elif [ $(command -v pacman) ]; then pacman -Sy && pacman --noconfirm -Sq core/python core/iproute2 core/sudo core/which core/systemd && rm -fr /var/lib/pacman/sync/* /var/cache/pacman/pkg/* ;\
     fi
 
 RUN if test -d /lib/systemd/system/sysinit.target.wants/ ; then (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done);\

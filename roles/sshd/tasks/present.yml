@@ -65,7 +65,7 @@
     service:
       name: "{{ sshd_keygen_service }}"
       state: started
-    when: ansible_os_family in ['RedHat','Rocky']
+    when: sshd_keygen_service is defined
 
   # similar situation on Debian
   # validation fails with
