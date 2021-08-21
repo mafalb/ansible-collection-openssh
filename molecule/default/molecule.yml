@@ -10,14 +10,6 @@ dependency:
 driver:
   name: docker
 
-lint: |
-  set -e
-  ! grep -r "no_log: false" .
-  yamllint .
-  ansible-lint -v
-  ansible-lint roles/*/vars/*.yml
-  flake8 -v
-
 platforms:
 - name: ${CI_HOSTNAME-ci-rocky8}
   image: ${CI_IMAGE:-quay.io/rockylinux/rockylinux:8}
