@@ -36,6 +36,7 @@ jobs:
         - centos8
         - debian9
         - debian10
+        - debian11
         - ubuntu16
         - ubuntu18
         - ubuntu20
@@ -77,6 +78,9 @@ jobs:
         - target: debian10
           image: docker.io/debian:buster
 
+        - target: debian11
+          image: docker.io/debian:bullseye
+
         - target: ubuntu16
           image: docker.io/ubuntu:xenial
 
@@ -85,6 +89,9 @@ jobs:
 
         - target: ubuntu20
           image: docker.io/ubuntu:focal
+
+        - target: ubuntu2104
+          image: docker.io/ubuntu:hirsute
 
     env:
       
