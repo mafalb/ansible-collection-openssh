@@ -195,9 +195,6 @@ jobs:
 
         include:
 
-        - target: arch
-          image: docker.io/archlinux:latest
-
         - target: fedora33
           image: docker.io/fedora:33
 
