@@ -176,7 +176,6 @@ jobs:
       matrix:
 
         target:
-        - arch
         - fedora35
         - c9s
         - ubuntu2110
@@ -187,9 +186,6 @@ jobs:
         - '2.11'
 
         include:
-
-        - target: arch
-          image: docker.io/archlinux:latest
 
         - target: fedora35
           image: quay.io/fedora/fedora:35-x86_64
