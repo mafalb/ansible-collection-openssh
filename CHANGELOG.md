@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.1 2021-08-21
+
+- add support for ArchLinux
+- CI on Debian 11 bullseye
+
 ## v1.1.0 2021-07-13
 
 - add support for rocky
