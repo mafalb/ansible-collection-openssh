@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/bash -eu
 
 ret=0
 
 for role in roles/*
 do
-	ls $role/README.md || ret=1
+	ls "$role/README.md" || ret=1
 done
 
 exit $ret
