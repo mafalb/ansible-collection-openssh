@@ -27,7 +27,6 @@ jobs:
       matrix:
 
         target:
-        - arch
         - fedora33
         - fedora34
         - c8s
@@ -47,9 +46,6 @@ jobs:
         - '2.11'
 
         include:
-
-        - target: arch
-          image: docker.io/archlinux:latest
 
         - target: fedora33
           image: docker.io/fedora:33
