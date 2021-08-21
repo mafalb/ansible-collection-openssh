@@ -28,6 +28,7 @@ galaxy_info:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
   platforms:
+  - name: ArchLinux
   - name: EL
     versions:
     - 7
