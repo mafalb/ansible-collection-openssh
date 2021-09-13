@@ -19,6 +19,13 @@
 
 ---
 
+- name: Verify sshd_config_template
+  hosts: one_match
+  tasks:
+  - name: sshd_config is present
+    command: grep 132418138a13 /tmp/sshd_config_1.conf
+    changed_when: false
+
 - name: Verify
   hosts: ci
 

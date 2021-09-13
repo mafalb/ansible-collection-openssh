@@ -52,6 +52,13 @@ you can also remove openssh if you want.
 
 ```sshd_config_template: test.conf.j2```
 
+```sshd_config_mode: '0600'```
+
+```yaml
+sshd_config:
+  PermitRootLogin: yes
+```
+
 ## License
 
 GPLv3

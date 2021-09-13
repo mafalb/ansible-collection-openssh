@@ -64,6 +64,24 @@
           AuthorizedKeysFile: /etc/ssh/authorized_keys/sftpchroot .ssh/authorized_keys
           ForceCommand: internal-sftp
 
+
+- name: converge a non default config file location
+  hosts: one_match
+
+  environment:
+    http_proxy: http://ci-proxy:3128
+    https_proxy: http://ci-proxy:3128
+
+  roles:
+
+  # this is only for testing role arguments
+  # and should not change the running sshd
+  #
+  - role: mafalb.openssh.sshd
+    sshd_config_template: sshd_config_1.j2
+    sshd_config_file: /tmp/sshd_config_1.conf
+
+
 - name: Match block that is not a list
   hosts: one_match
 

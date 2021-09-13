@@ -27,6 +27,7 @@ sshd_service: sshd
 sftp_subsystem: /usr/lib/openssh/sftp-server
 
 sshd_config_has_global_include: true
+sshd_config_default_mode: '0664'
 sshd_missing_runtime_dir: true
 sshd_gssapiauth: 'no'
 sshd_syslogfacility: AUTH
