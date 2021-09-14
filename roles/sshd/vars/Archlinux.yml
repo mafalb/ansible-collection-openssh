@@ -20,18 +20,15 @@
 ---
 
 sshd_packages:
-- openssh-server
+- core/openssh
 
-sshd_extra_packages:
-- initscripts
-
+sshd_keygen_service: sshdgenkeys.service
 sshd_service: sshd
-sshd_keygen_service: sshd-keygen.target
-sftp_subsystem: /usr/libexec/openssh/sftp-server
+sftp_subsystem: /usr/lib/ssh/sftp-server
 
-sshd_config_has_global_include: true
-sshd_config_default_mode: '0600'
-sshd_gssapiauth: 'yes'
-sshd_syslogfacility: AUTHPRIV
+sshd_config_has_global_include: false
+sshd_config_default_mode: '0644'
+sshd_gssapiauth: 'no'
+sshd_syslogfacility: AUTH
 
 ...

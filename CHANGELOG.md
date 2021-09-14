@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.2 2021-09-14
+
+- fix sshd_config_template
+- add option sshd_config_mode
+- add support for ArchLinux
+- CI on Debian 11 bullseye
+- CI on Arch
+
 ## v1.1.0 2021-07-13
 
 - add support for rocky

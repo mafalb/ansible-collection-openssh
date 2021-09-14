@@ -19,6 +19,27 @@
 
 ---
 
+- name: Verify sshd_config_template
+  hosts: one_match
+  tasks:
+  - name: sshd_config is present
+    command: grep 132418138a13 /tmp/sshd_config_1.conf
+    changed_when: false
+  - name: sshd_config is present
+    command: grep 132418138a13 /tmp/sshd_config_2.conf
+    changed_when: false
+
+  - name: get mode of config files
+    stat:
+      path: "{{ item }}"
+    with_items:
+    - /tmp/sshd_config_2.conf
+    register: _stat
+
+  - name: assert that mode was set
+    assert:
+      that:
+      - _stat.results[0].stat.mode == '0777'
 - name: Verify
   hosts: ci
 

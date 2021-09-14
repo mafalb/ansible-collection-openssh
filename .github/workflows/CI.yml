@@ -10,13 +10,169 @@ on:
     - '**'
     tags-ignore:
     - '*'
-
+  pull_request:
+  pull_request_review:
   schedule:
     - cron: '40 11 * * 6'
 
 jobs:
 
+  SANITY:
+
+    # don't run on pull request from ourselves
+    #
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+
+      matrix:
+
+        include:
+
+        - ansible_version: '2.9'
+          python-version: 2.7
+          ansible-lint_version: '==4.*'
+
+        - ansible_version: '2.9'
+          python-version: 3.5
+          ansible-lint_version: '<5'
+
+        - ansible_version: '2.9'
+          python-version: 3.6
+
+        - ansible_version: '2.9'
+          python-version: 3.7
+
+        - ansible_version: '2.9'
+          python-version: 3.8
+
+
+        - ansible_version: '2.10'
+          python-version: 3.6
+
+        - ansible_version: '2.10'
+          python-version: 3.7
+
+        - ansible_version: '2.10'
+          python-version: 3.8
+
+        - ansible_version: '2.10'
+          python-version: 3.9
+
+
+        - ansible_core_version: '2.11'
+          python-version: 3.6
+
+        - ansible_core_version: '2.11'
+          python-version: 3.7
+
+        - ansible_core_version: '2.11'
+          python-version: 3.8
+
+        - ansible_core_version: '2.11'
+          python-version: 3.9
+
+    env:
+      PY_COLORS: 1
+      ANSIBLE_FORCE_COLOR: 1
+      ANSIBLE_PYTHON_INTERPRETER: ${{ matrix.python-version }}/bin/python
+
+    defaults:
+      run:
+        working-directory: ansible_collections/mafalb/scl
+
+    steps:
+
+    - name: checkout collection mafalb.scl
+      uses: actions/checkout@v2
+      with:
+        path: ansible_collections/mafalb/scl
+
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: python version
+      run: |
+        python --version
+        which python
+        whereis python
+        python3 --version
+        which python3
+        whereis python3
+        ls -l /opt/hostedtoolcache/Python/
+
+    - name: install shellcheck
+      run: sudo apt install shellcheck
+
+    - name: install ansible 2.9/2.10 for python 2.7
+      if: ${{ matrix.python-version == '2.7' && matrix.ansible_version }}
+      run: |
+        pip install virtualenv
+        virtualenv ~/virtualenv
+        . ~/virtualenv/bin/activate
+        pip install wheel
+        pip install -U pip setuptools
+        pip install "ansible==${{ matrix.ansible_version }}.*" ansible-lint 'flake8<3.9' pylint 'pycodestyle<2.7'
+
+    - name: install ansible for python 2.7
+      if: ${{ matrix.python-version == '2.7' && matrix.ansible_core_version }}
+      run: |
+        pip install virtualenv
+        virtualenv ~/virtualenv
+        . ~/virtualenv/bin/activate
+        pip install wheel
+        pip install -U pip setuptools
+        pip install "ansible-core==${{ matrix.ansible_core_version }}.*" ansible ansible-lint 'flake8<3.9' pylint 'pycodestyle<2.7'
+
+    - name: install ansible 2.9/2.10 for python 3
+      if: ${{ matrix.python-version != '2.7' && matrix.ansible_version }}
+      run: |
+        python -m venv ~/virtualenv
+        . ~/virtualenv/bin/activate
+        pip install wheel
+        pip install -U pip setuptools
+        pip install "ansible==${{ matrix.ansible_version }}.*" ansible-lint flake8 pylint 'pycodestyle<2.7'
+
+    - name: install ansible for python 3
+      if: ${{ matrix.python-version != '2.7' && matrix.ansible_core_version }}
+      run: |
+        python -m venv ~/virtualenv
+        . ~/virtualenv/bin/activate
+        pip install wheel
+        pip install -U pip setuptools
+        pip install "ansible-core==${{ matrix.ansible_core_version }}.*" ansible ansible-lint${{ matrix.ansible-lint_version }} flake8 pylint 'pycodestyle<2.7'
+
+    - name: check ansible version
+      run: |
+        source ~/virtualenv/bin/activate
+        ansible --version
+        which ansible-test
+        ansible-lint --version
+        ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+
+    - name: check python version
+      run: |
+        source ~/virtualenv/bin/activate
+        ansible --version | grep "^\s*python.* ${{ matrix.python-version }}"
+
+    - name: lint
+      run: |
+        source ~/virtualenv/bin/activate
+        if ansible-lint --version|grep "^ansible-lint 4"
+        then
+            ANSIBLE_LINT_VERSION=4
+        fi
+        . tests/lint.sh requirements ${{ matrix.python-version }}
+
   CI:
+
+    # don't run on pull request from ourselves
+    #
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
 
     runs-on: ubuntu-20.04
 
@@ -27,6 +183,7 @@ jobs:
       matrix:
 
         target:
+        - arch
         - fedora33
         - fedora34
         - c8s
@@ -36,9 +193,11 @@ jobs:
         - centos8
         - debian9
         - debian10
+        - debian11
         - ubuntu16
         - ubuntu18
         - ubuntu20
+        - ubuntu2104
 
         ansible_version:
         - '2.9'
@@ -46,6 +205,9 @@ jobs:
         - '2.11'
 
         include:
+
+        - target: arch
+          image: docker.io/archlinux:latest
 
         - target: fedora33
           image: docker.io/fedora:33
@@ -74,6 +236,9 @@ jobs:
         - target: debian10
           image: docker.io/debian:buster
 
+        - target: debian11
+          image: docker.io/debian:bullseye
+
         - target: ubuntu16
           image: docker.io/ubuntu:xenial
 
@@ -82,6 +247,9 @@ jobs:
 
         - target: ubuntu20
           image: docker.io/ubuntu:focal
+
+        - target: ubuntu2104
+          image: docker.io/ubuntu:hirsute
 
     env:
       

@@ -65,7 +65,7 @@
     service:
       name: "{{ sshd_keygen_service }}"
       state: started
-    when: ansible_os_family in ['RedHat','Rocky']
+    when: sshd_keygen_service is defined
 
   # similar situation on Debian
   # validation fails with
@@ -84,9 +84,9 @@
   - name: sshd main config is present
     template:
       src: "{{ sshd_config_template }}"
-      dest: /etc/ssh/sshd_config
+      dest: "{{ sshd_config_file }}"
       validate: "{{ sshd_validate }}"
-      mode: '644'
+      mode: "{{ sshd_config_mode|default(sshd_config_default_mode) }}"
       backup: true
     notify: reload sshd
 
