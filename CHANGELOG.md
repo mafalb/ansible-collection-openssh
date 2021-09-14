@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.2 2021-09-XX
+
+- fix sshd_config_template
+- added option sshd_config_mode
+
 ## v1.1.1 2021-08-21
 
 - add support for ArchLinux

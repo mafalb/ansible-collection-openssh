@@ -81,6 +81,39 @@
     sshd_config_template: sshd_config_1.j2
     sshd_config_file: /tmp/sshd_config_1.conf
 
+  # this is only for testing role arguments
+  # and should not change the running sshd
+  #
+  - role: mafalb.openssh.sshd
+    sshd_config_template: sshd_config_1.j2
+    sshd_config_file: /tmp/sshd_config_2.conf
+    sshd_config_mode: '0777'
+
+
+- name: numeric mode fails
+  hosts: one_match
+
+  tasks:
+
+  - block:
+
+    # this is only for testing role arguments
+    # and should not change the running sshd
+    #
+    - name: numeric argument
+      include_role:
+        name: mafalb.openssh.sshd
+      vars:
+        sshd_config_template: sshd_config_1.j2
+        sshd_config_file: /tmp/sshd_config_3.conf
+        sshd_config_mode: 0777
+
+    rescue:
+    # this is not a great check
+    # but include_role returns nothing useful
+    - name: failure is expected
+      assert:
+        that: mafalb_error == 'mode not a string'
 
 - name: Match block that is not a list
   hosts: one_match

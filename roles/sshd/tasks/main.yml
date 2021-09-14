@@ -19,6 +19,10 @@
 
 ---
 
+- name: reset mafalb_error
+  set_fact:
+    mafalb_error: None
+
 - name: get OS specific variables
   with_first_found:
   - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
@@ -26,6 +30,7 @@
   - "{{ ansible_os_family }}.yml"
   include_vars:
     file: "{{ item }}"
+
 
 - name: assertions
   assert:
@@ -35,6 +40,22 @@
     - sshd_state in [ 'present', 'absent' ]
     - sshd_config|type_debug == 'dict'
     - sshd.cfg|type_debug == 'dict'
+
+- block:
+  - name: check that mode is given as string
+    assert:
+      that:
+      - sshd_config_mode|default("")|type_debug in ['str', 'AnsibleUnicode']
+      success_msg: "{{ sshd_config_mode|default('') }} is a string"
+      fail_msg: "{{ sshd_config_mode|default('') }} is not a string"
+  rescue:
+  - name: set a fact
+    set_fact:
+      mafalb_error: mode not a string
+  - name: fail
+    fail:
+      msg: "mode not a string: {{ sshd_config_mode|default('') }}"
+
 
 - name: include_tasks for {{ sshd_state }}
   include_tasks: "{{ sshd_state }}.yml"
