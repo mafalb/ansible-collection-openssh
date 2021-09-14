@@ -36,9 +36,6 @@
     - /tmp/sshd_config_2.conf
     register: _stat
 
-  - debug: var=_stat
-  - debug: var=_stat.results[0].stat.mode|string
-
   - name: assert that mode was set
     assert:
       that:
