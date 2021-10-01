@@ -1,6 +1,8 @@
 ---
 # Based on ansible-lint config
 extends: default
+ignore: |
+  .cache/
 
 rules:
   braces:

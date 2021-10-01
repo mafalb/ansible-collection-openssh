@@ -1,10 +1,12 @@
-# vim: set ft=yaml ts=2 expandtab:
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
 dependency:
   name: galaxy
   options:
-    role-file: idontexist.yml   # avoid warning while running molecule 
+    role-file: idontexist.yml   # avoid warning while running molecule
     requirements-file: molecule/default/requirements.yml
 
 driver:
