@@ -20,6 +20,11 @@
 ---
 
 sshd_state: present
+sshd_config: {}
+
+# make config file configurable for CI
+sshd_config_file: /etc/ssh/sshd_config
+
 sshd_config_d: /etc/ssh/sshd_config.d
 sshd_config_template: mafalb.openssh.sshd_config.j2
 sshd_global_authorized_keys: false

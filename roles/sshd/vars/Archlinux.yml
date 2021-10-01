@@ -27,6 +27,7 @@ sshd_service: sshd
 sftp_subsystem: /usr/lib/ssh/sftp-server
 
 sshd_config_has_global_include: false
+sshd_config_default_mode: '0644'
 sshd_gssapiauth: 'no'
 sshd_syslogfacility: AUTH
 
