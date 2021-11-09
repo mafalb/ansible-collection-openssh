@@ -20,6 +20,7 @@ on:  # yamllint disable-line rule:truthy
 jobs:
 
   SANITY:
+    if: false
 
     # don't run on pull request from ourselves
     #
@@ -275,7 +276,21 @@ jobs:
     # use the github actions ansible
     #
     - name: get mafalb.ansible
+      if: false
       run: ansible-galaxy collection install mafalb.ansible
+
+    # temporarily use dev branch
+    - name: checkout collection mafalb.ansible
+      uses: actions/checkout@v2
+      with:
+        repository: mafalb/ansible-collection-ansible
+        ref: f-virtualenv
+        path: ansible_collections/mafalb/ansible
+
+    - name: move collection ansible.mafalb into place
+      run: |
+        mkdir -p ~/.ansible/collections/ansible_collections/mafalb
+        mv ../ansible ~/.ansible/collections/ansible_collections/mafalb/
 
     # use the system ansible
     #
