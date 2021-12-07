@@ -93,14 +93,14 @@ jobs:
 
     defaults:
       run:
-        working-directory: ansible_collections/mafalb/ansible
+        working-directory: ansible_collections/mafalb/openssh
 
     steps:
 
-      - name: checkout collection mafalb.ansible
+      - name: checkout collection mafalb.openssh
         uses: actions/checkout@v2
         with:
-          path: ansible_collections/mafalb/ansible
+          path: ansible_collections/mafalb/openssh
 
       - name: setup python
         uses: actions/setup-python@v2
@@ -115,6 +115,7 @@ jobs:
 
       - name: install ansible
         run: |
+          ansible-galaxy collection install mafalb.ansible
           ansible-playbook -D ~/.ansible/collections/ansible_collections/mafalb/ansible/playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}","ansible-lint${{ matrix.ansible_lint_specifier }}","_ansible_test","flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
         env:
           ANSIBLE_COLLECTIONS_PATHS: ../../..
