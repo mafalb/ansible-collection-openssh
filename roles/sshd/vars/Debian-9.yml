@@ -7,7 +7,7 @@ sshd_packages:
 - openssh-server
 - openssh-sftp-server
 
-sshd_service: sshd
+sshd_service: ssh
 sftp_subsystem: /usr/lib/openssh/sftp-server
 
 sshd_config_has_global_include: false
