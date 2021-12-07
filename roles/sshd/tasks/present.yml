@@ -19,7 +19,7 @@
 
 - block:
 
-    - name: check if ssh service unit is present
+    - name: check if ssh service unit is present # noqa command-instead-of-module 303
       command: systemctl cat {{ sshd_service }}
       register: __reg_check_for_service_unit
       changed_when: false
@@ -34,9 +34,9 @@
       ansible.builtin.systemd:
         name: "{{ sshd_service }}"
         masked: true
-      when: 
+      when:
         - __reg_check_for_service_unit.rc != 0
-  when: 
+  when:
     - ansible_os_family == 'Debian'
     - ansible_service_mgr == 'systemd'
 
