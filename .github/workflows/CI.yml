@@ -19,133 +19,133 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
 
-    ansible-test:
+  ansible-test:
 
-    # don't run on pull request from ourselves
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
+  # don't run on pull request from ourselves
+  if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+  runs-on: ubuntu-20.04
+  strategy:
+    fail-fast: false
 
-      matrix:
+    matrix:
 
-        include:
+      include:
 
-          - ansible_version: '2.9'
-            python_version: '2.7'
+        - ansible_version: '2.9'
+          python_version: '2.7'
 
-          - ansible_version: '2.9'
-            python_version: '3.5'
+        - ansible_version: '2.9'
+          python_version: '3.5'
 
-          - ansible_version: '2.9'
-            python_version: '3.6'
+        - ansible_version: '2.9'
+          python_version: '3.6'
 
-          - ansible_version: '2.9'
-            python_version: '3.7'
+        - ansible_version: '2.9'
+          python_version: '3.7'
 
-          - ansible_version: '2.9'
-            python_version: '3.8'
+        - ansible_version: '2.9'
+          python_version: '3.8'
 
-          - ansible_version: '2.9.6'
-            python_version: '3.8'
-
-
-          - ansible_version: '2.10'
-            python_version: '3.6'
-
-          - ansible_version: '2.10'
-            python_version: '3.7'
-
-          - ansible_version: '2.10'
-            python_version: '3.8'
-
-          - ansible_version: '2.10'
-            python_version: '3.9'
+        - ansible_version: '2.9.6'
+          python_version: '3.8'
 
 
-          - ansible_version: '2.11'
-            python_version: 3.6
+        - ansible_version: '2.10'
+          python_version: '3.6'
 
-          - ansible_version: '2.11'
-            python_version: 3.7
+        - ansible_version: '2.10'
+          python_version: '3.7'
 
-          - ansible_version: '2.11'
-            python_version: 3.8
+        - ansible_version: '2.10'
+          python_version: '3.8'
 
-          - ansible_version: '2.11'
-            python_version: 3.9
+        - ansible_version: '2.10'
+          python_version: '3.9'
 
 
-          - ansible_version: '2.12'
-            python_version: '3.8'
+        - ansible_version: '2.11'
+          python_version: 3.6
 
-          - ansible_version: '2.12'
-            python_version: '3.9'
+        - ansible_version: '2.11'
+          python_version: 3.7
 
-          - ansible_version: '2.12'
-            python_version: '3.10'
+        - ansible_version: '2.11'
+          python_version: 3.8
 
-    env:
-      PY_COLORS: 1
-      ANSIBLE_FORCE_COLOR: 1
-      # necessary ?
-      ANSIBLE_PYTHON_INTERPRETER: python${{ matrix.python_version }}
+        - ansible_version: '2.11'
+          python_version: 3.9
 
-    defaults:
-      run:
-        working-directory: ansible_collections/mafalb/ansible
 
-    steps:
+        - ansible_version: '2.12'
+          python_version: '3.8'
 
-      - name: checkout collection mafalb.ansible
-        uses: actions/checkout@v2
-        with:
-          path: ansible_collections/mafalb/ansible
+        - ansible_version: '2.12'
+          python_version: '3.9'
 
-      - name: setup python
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python_version }}
+        - ansible_version: '2.12'
+          python_version: '3.10'
 
-      # necessary ?
-      - name: install virtualenv for python 2.7
-        if: matrix.python_version == '2.7'
-        run: |
-          pip install virtualenv
+  env:
+    PY_COLORS: 1
+    ANSIBLE_FORCE_COLOR: 1
+    # necessary ?
+    ANSIBLE_PYTHON_INTERPRETER: python${{ matrix.python_version }}
 
-      - name: install ansible
-        run: |
-          ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: ../../..
+  defaults:
+    run:
+      working-directory: ansible_collections/mafalb/ansible
 
-      - name: install shellcheck
-        run: sudo apt-get install shellcheck
+  steps:
 
-      - name: check ansible version
-        run: |
-          source ~/.virtualenvs/ansible/bin/activate
-          ansible --version
-          ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+    - name: checkout collection mafalb.ansible
+      uses: actions/checkout@v2
+      with:
+        path: ansible_collections/mafalb/ansible
 
-      - name: check python version
-        run: |
-          source ~/.virtualenvs/ansible/bin/activate
-          ansible --version | grep "^\s*python.* ${{ matrix.python_version }}"
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python_version }}
 
-      - name: lint
-        run: |
-          source ~/.virtualenvs/ansible/bin/activate
-          if ansible-lint --version|grep "^ansible-lint 4"
-          then
-              ANSIBLE_LINT_VERSION=4
-          fi
-          . tests/lint.sh requirements ${{ matrix.python_version }}
+    # necessary ?
+    - name: install virtualenv for python 2.7
+      if: matrix.python_version == '2.7'
+      run: |
+        pip install virtualenv
 
-      - name: sanity
-        run: |
-          source ~/.virtualenvs/ansible/bin/activate
-          ansible-test sanity --requirements --python ${{ matrix.python_version }}
+    - name: install ansible
+      run: |
+        ansible-playbook -D playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}", "ansible-lint${{ matrix.ansible_lint_specifier }}", "_ansible_test", "flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
+      env:
+        ANSIBLE_COLLECTIONS_PATHS: ../../..
+
+    - name: install shellcheck
+      run: sudo apt-get install shellcheck
+
+    - name: check ansible version
+      run: |
+        source ~/.virtualenvs/ansible/bin/activate
+        ansible --version
+        ansible --version | grep "^ansible.* ${{ matrix.ansible_version }}"
+
+    - name: check python version
+      run: |
+        source ~/.virtualenvs/ansible/bin/activate
+        ansible --version | grep "^\s*python.* ${{ matrix.python_version }}"
+
+    - name: lint
+      run: |
+        source ~/.virtualenvs/ansible/bin/activate
+        if ansible-lint --version|grep "^ansible-lint 4"
+        then
+            ANSIBLE_LINT_VERSION=4
+        fi
+        . tests/lint.sh requirements ${{ matrix.python_version }}
+
+    - name: sanity
+      run: |
+        source ~/.virtualenvs/ansible/bin/activate
+        ansible-test sanity --requirements --python ${{ matrix.python_version }}
 
   CI:
 
