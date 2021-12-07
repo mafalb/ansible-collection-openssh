@@ -117,8 +117,6 @@ jobs:
         run: |
           ansible-galaxy collection install mafalb.ansible
           ansible-playbook -D ~/.ansible/collections/ansible_collections/mafalb/ansible/playbooks/install-ansible.yml -e '{"virtualenv_packages":["_ansible==${{ matrix.ansible_version }}","ansible-lint${{ matrix.ansible_lint_specifier }}","_ansible_test","flake8"]}' -e mafalb_ansible_virtualenv_python=python${{ matrix.python_version }} -t all,debug
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: ../../..
 
       - name: install shellcheck
         run: sudo apt-get install shellcheck
