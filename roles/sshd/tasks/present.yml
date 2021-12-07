@@ -17,6 +17,29 @@
   - sshd_config.Match is defined
   - false
 
+- block:
+
+    - name: check if ssh service unit is present
+      command: systemctl cat {{ sshd_service }}
+      register: __reg_check_for_service_unit
+      changed_when: false
+      failed_when: false
+      when:
+        - ansible_os_family == 'Debian'
+        - ansible_service_mgr == 'systemd'
+
+    # avoid starting of service before it is configured
+    # not strictly necessary
+    - name: sshd is masked
+      ansible.builtin.systemd:
+        name: "{{ sshd_service }}"
+        masked: true
+      when: 
+        - __reg_check_for_service_unit.rc != 0
+  when: 
+    - ansible_os_family == 'Debian'
+    - ansible_service_mgr == 'systemd'
+
 - name: sshd is present
   package:
     name: "{{ sshd_extra_packages|default([]) + sshd_packages }}"
@@ -79,6 +102,7 @@
     name: "{{ sshd_service }}"
     state: started
     enabled: true
+    masked: false
   register: _sshd_was_just_started
 
 ...
