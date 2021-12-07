@@ -174,7 +174,6 @@ jobs:
         - debian9
         - debian10
         - debian11
-        - ubuntu16
         - ubuntu18
         - ubuntu20
         - ubuntu2104
