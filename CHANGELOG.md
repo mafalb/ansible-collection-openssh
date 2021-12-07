@@ -1,5 +1,10 @@
 # Changelog
 
+##
+
+- support for fedora 35
+- support for ubuntu 21.10
+
 ## v1.1.2 2021-09-14
 
 - fix sshd_config_template
