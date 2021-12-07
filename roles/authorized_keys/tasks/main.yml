@@ -22,7 +22,7 @@
     state: directory
     owner: "{{ user }}"
     group: "{{ group|default(user) }}"
-    mode: "{{ (directory_mode|default(mode|int(8) + '110'|int(8)))|str }}"
+    mode: "{{ (directory_mode|default(mode|int(8) + '110'|int(8)))|string }}"
     setype: ssh_home_t
   when: manage_dir|bool
 
