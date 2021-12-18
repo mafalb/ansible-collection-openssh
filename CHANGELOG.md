@@ -4,6 +4,8 @@
 
 - support for fedora 35
 - support for ubuntu 21.10
+- mask the service unit before installing (on debianish systems)
+- bugfixes
 
 ## v1.1.2 2021-09-14
 
