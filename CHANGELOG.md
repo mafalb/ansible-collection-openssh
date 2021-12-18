@@ -1,6 +1,6 @@
 # Changelog
 
-##
+## v1.1.3 2021-12-18
 
 - support for fedora 35
 - support for ubuntu 21.10
