@@ -7,7 +7,7 @@
   service:
     name: "{{ sshd_service }}"
     state: reloaded
-  when: 
+  when:
     - not _sshd_was_just_started.changed
     - not container_build|default(false)
 
