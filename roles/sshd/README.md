@@ -48,6 +48,8 @@ you can also remove openssh if you want.
 
 ## Variables
 
+```container_build``` # [true|false]
+
 ```state: present``` # [present|absent]
 
 ```sshd_config_template: test.conf.j2```

@@ -4,6 +4,7 @@
 ---
 
 sshd_state: present
+sshd_start_service: true
 sshd_config: {}
 
 # make config file configurable for CI
@@ -15,4 +16,6 @@ sshd_global_authorized_keys: false
 
 # config defaults in vars/main.yml
 
+sshd_supported_service_managers:
+  - systemd
 ...
