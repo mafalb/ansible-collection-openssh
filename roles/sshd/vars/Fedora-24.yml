@@ -12,11 +12,14 @@ sshd_extra_packages:
 sshd_service: sshd
 sshd_keygen_service: sshd-keygen.target
 sshd_keygen:
-  - type: rsa
+  rsa:
+    type: rsa
     command: /usr/libexec/openssh/sshd-keygen rsa
-  - type: ecdsa
+  ecdsa:
+    type: ecdsa
     command: /usr/libexec/openssh/sshd-keygen ecdsa
-  - type: ed25519
+  ed25519:
+    type: ed25519
     command: /usr/libexec/openssh/sshd-keygen ed25519
 sftp_subsystem: /usr/libexec/openssh/sftp-server
 
