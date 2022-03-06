@@ -62,6 +62,9 @@
     notify: reload sshd
     when: sshd_config_has_global_include
 
+  - name: debug
+    debug: var=sshd_keygen
+
   # RedHat only:
   #
   # if the keys does not exist yet
