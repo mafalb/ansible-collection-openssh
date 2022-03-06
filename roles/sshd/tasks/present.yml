@@ -69,10 +69,14 @@
   # so generate the keys manually
   #
   - name: hostkeys are generated
-    command: "{{ sshd_keygen|default('/usr/sbin/sshd-keygen') }}"
+    command: "{{ (ssh_keygen[sshd_key_type]|default(sshd_keygen['*'])).command }}"
+    loop: "{{ sshd_hostkeytypes }}"
+    loop_control:
+      loop_var: sshd_key_type
     args:
-      creates: /etc/ssh/ssh_host_*_key
-
+      creates: /etc/ssh/ssh_host_{{ (sshd_keygen[sshd_key_type]|default(sshd_keygen['*'])).type }}_key
+    when: sshd_keygen is defined
+    
   # similar situation on Debian
   # validation fails with
   #

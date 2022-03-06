@@ -7,7 +7,10 @@ sshd_packages:
 - core/openssh
 
 sshd_keygen_service: sshdgenkeys.service
-sshd_keygen: /usr/bin/ssh-keygen -A
+sshd_keygen:
+  '*':
+    type: '*'
+    command: /usr/bin/ssh-keygen -A
 sshd_service: sshd
 sftp_subsystem: /usr/lib/ssh/sftp-server
 

@@ -18,4 +18,10 @@ sshd_global_authorized_keys: false
 
 sshd_supported_service_managers:
   - systemd
+
+sshd_hostkeytypes:
+  - rsa
+  - ed25519
+  - ecdsa
+
 ...
