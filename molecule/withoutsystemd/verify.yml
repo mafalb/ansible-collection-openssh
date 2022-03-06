@@ -12,8 +12,7 @@
       changed_when: false
       register: _ps
       failed_when: false
-    - debug: var=_ps
-    - name: ssh is running
+    - name: ssh is running  # noqa: no-changed-when 301
       command: /usr/sbin/sshd
 
 - name: ssh login is possible

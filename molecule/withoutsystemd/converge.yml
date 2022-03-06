@@ -27,7 +27,6 @@
       changed_when: false
       loop: "{{ groups.client_group }}"
       register: _public_keys
-    - debug: var=_public_keys.results|map(attribute='stdout')
   roles:
     - role: mafalb.openssh.sshd
     - role: mafalb.openssh.authorized_keys
