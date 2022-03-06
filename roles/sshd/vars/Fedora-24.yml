@@ -11,6 +11,7 @@ sshd_extra_packages:
 
 sshd_service: sshd
 sshd_keygen_service: sshd-keygen.target
+sshd_keygen: /usr/libexec/openssh/sshd-keygen
 sftp_subsystem: /usr/libexec/openssh/sftp-server
 
 sshd_config_has_global_include: false
