@@ -239,4 +239,9 @@ jobs:
         source ~/.virtualenvs/molecule/bin/activate
         molecule -e .env-${{ matrix.os }}.yml test
 
+    - name: molecule tests scenario withoutsystemd
+      run: |
+        source ~/.virtualenvs/molecule/bin/activate
+        molecule -e .env-${{ matrix.os }}.yml test -s withoutsystemd
+
 ...
