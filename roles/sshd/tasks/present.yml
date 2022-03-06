@@ -76,7 +76,7 @@
     args:
       creates: /etc/ssh/ssh_host_{{ (sshd_keygen[sshd_key_type]|default(sshd_keygen['*'])).type }}_key
     when: sshd_keygen is defined
-    
+
   # similar situation on Debian
   # validation fails with
   #
