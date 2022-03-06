@@ -69,7 +69,7 @@
   # so generate the keys manually
   #
   - name: hostkeys are generated
-    command: /usr/sbin/sshd-keygen
+    command: "{{ sshd_keygen|default('/usr/sbin/sshd-keygen') }}"
     args:
       creates: /etc/ssh/ssh_host_*_key
 
