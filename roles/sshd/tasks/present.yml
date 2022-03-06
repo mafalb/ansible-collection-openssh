@@ -17,19 +17,15 @@
   - sshd_config.Match is defined
   - false
 
-- block:
-
+# avoid starting of service before it is configured
+# not strictly necessary
+- name: mask sshd on debian on initial install
+  block:
     - name: check if ssh service unit is present # noqa command-instead-of-module 303
       command: systemctl cat {{ sshd_service }}
       register: __reg_check_for_service_unit
       changed_when: false
       failed_when: false
-      when:
-        - ansible_os_family == 'Debian'
-        - not container_build|default(false)
-
-    # avoid starting of service before it is configured
-    # not strictly necessary
     - name: sshd is masked
       ansible.builtin.systemd:
         name: "{{ sshd_service }}"
