@@ -58,20 +58,18 @@
     notify: reload sshd
     when: sshd_config_has_global_include
 
-  # RedHat only:
-  #
   # if the keys does not exist yet
-  # the validation of sshd_config in the next task would fail
+  # the validation of sshd_config in the next task could fail
   # so generate the keys manually
   #
   - name: hostkeys are generated
-    command: "{{ (ssh_keygen[sshd_key_type]|default(sshd_keygen['*'])).command }}"
+    command: "{{ sshd_keygen_dict[sshd_keytype].command|default(sshd_keygen) }}"
+    args:
+      creates: /etc/ssh/ssh_host_{{ sshd_keygen_dict[sshd_keytype].type|default('*') }}_key
     loop: "{{ sshd_hostkeytypes }}"
     loop_control:
-      loop_var: sshd_key_type
-    args:
-      creates: /etc/ssh/ssh_host_{{ (sshd_keygen[sshd_key_type]|default(sshd_keygen['*'])).type }}_key
-    when: sshd_keygen is defined
+      loop_var: sshd_keytype
+    when: sshd_keygen_dict|default(sshd_keygen) is defined
 
   # similar situation on Debian
   # validation fails with

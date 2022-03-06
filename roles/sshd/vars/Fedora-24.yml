@@ -11,7 +11,7 @@ sshd_extra_packages:
 
 sshd_service: sshd
 sshd_keygen_service: sshd-keygen.target
-sshd_keygen:
+sshd_keygen_dict:
   rsa:
     type: rsa
     command: /usr/libexec/openssh/sshd-keygen rsa
