@@ -241,6 +241,7 @@ jobs:
 
     - name: molecule tests scenario withoutsystemd
       run: |
+        sudo docker system prune
         source ~/.virtualenvs/molecule/bin/activate
         molecule -e .env-${{ matrix.os }}.yml test -s withoutsystemd
 

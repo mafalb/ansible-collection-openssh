@@ -15,15 +15,15 @@ driver:
 platforms:
 - name: ${CI_HOSTNAME}
   image: ${CI_IMAGE}
-  pre_build_image: true
+  pre_build_image: false
   networks:
     - name: molecule-external
   groups:
     - server_group
 
-- name: ${CI_HOSTNAME}-2
+- name: ci-client
   image: ${CI_IMAGE}
-  pre_build_image: true
+  pre_build_image: false
   networks:
     - name: molecule-external
   groups:

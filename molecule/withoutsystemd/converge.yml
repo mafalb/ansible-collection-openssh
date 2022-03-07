@@ -32,7 +32,7 @@
     - role: mafalb.openssh.authorized_keys
       user: root
       group: testssh1
-      keys: "{{ _public_keys.results|map(attribute='stdout') }}"
+      keys: "{{ _public_keys.results|map(attribute='stdout')|list }}"
       path: /home/testssh1/.ssh/authorized_keys
       mode: '640'
 
