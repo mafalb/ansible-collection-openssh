@@ -3,13 +3,13 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- name: prepare server
-  hosts: server_group
+- name: prepare client
+  hosts: client_group
   tasks:
-    - name: /run/nologin is absent
-      file:
-        path: /run/nologin
-        state: absent
-      when: false
+    - name: dependencies for ansible are present
+      package:
+        name:
+          - openssh-clients
+          - python3-cryptography
 
 ...
