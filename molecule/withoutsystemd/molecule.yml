@@ -22,7 +22,7 @@ platforms:
     - server_group
 
 - name: ci-client
-  image: ${CI_IMAGE}
+  image: quay.io/rockylinux/rockylinux:8
   pre_build_image: false
   networks:
     - name: molecule-external

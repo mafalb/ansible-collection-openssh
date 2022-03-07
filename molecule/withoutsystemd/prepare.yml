@@ -3,13 +3,6 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- name: prepare client
-  hosts: client_group
-  tasks:
-    - name: openssh clients are present
-      package:
-        name: openssh-clients
-
 - name: prepare server
   hosts: server_group
   tasks:
