@@ -3,7 +3,7 @@
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
 
-- name: verify ssh
+- name: verify sshd is running
   hosts: server_group
   tasks:
     # on containers sshd is not started automatically
@@ -12,10 +12,10 @@
       changed_when: false
       register: _ps
       failed_when: false
-    - name: ssh is running  # noqa: no-changed-when 301
+    - name: sshd is running  # noqa: no-changed-when 301
       command: /usr/sbin/sshd
 
-- name: ssh login is possible
+- name: verify ssh login is possible
   hosts: client_group
   tasks:
     - name: ssh login is possible
