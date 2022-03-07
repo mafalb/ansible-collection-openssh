@@ -165,6 +165,7 @@ jobs:
         - arch
         - fedora34
         - fedora35
+        - fedora36
         - c8s
         - c9s
         - alma8

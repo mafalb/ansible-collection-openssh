@@ -1,9 +1,10 @@
 # Changelog
 
-## v1.1.4 2022-XX-XX
+## v1.2.0 2022-03-07
 
 - introduce variable container_build to support building containers without systemd
-- remove support for centos 8
+- remove CI on CentOS 8
+- CI on fedora 36
 
 ## v1.1.3 2021-12-18
 
