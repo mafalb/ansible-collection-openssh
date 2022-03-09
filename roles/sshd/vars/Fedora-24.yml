@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) 2021,2022 Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
@@ -11,6 +11,16 @@ sshd_extra_packages:
 
 sshd_service: sshd
 sshd_keygen_service: sshd-keygen.target
+sshd_keygen_dict:
+  rsa:
+    type: rsa
+    command: /usr/libexec/openssh/sshd-keygen rsa
+  ecdsa:
+    type: ecdsa
+    command: /usr/libexec/openssh/sshd-keygen ecdsa
+  ed25519:
+    type: ed25519
+    command: /usr/libexec/openssh/sshd-keygen ed25519
 sftp_subsystem: /usr/libexec/openssh/sftp-server
 
 sshd_config_has_global_include: false

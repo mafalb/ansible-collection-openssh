@@ -1,0 +1,26 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- name: verify sshd is running
+  hosts: server_group
+  tasks:
+    # on containers sshd is not started automatically
+    - name: check ssh
+      command: ps -C sshd
+      changed_when: false
+      register: _ps
+      failed_when: false
+    - name: sshd is running  # noqa: no-changed-when 301
+      command: /usr/sbin/sshd
+
+- name: verify ssh login is possible
+  hosts: client_group
+  tasks:
+    - name: ssh login is possible
+      command: ssh -i /tmp/id_rsa -o StrictHostKeyChecking=no testssh1@{{ item }} /bin/true
+      changed_when: false
+      loop: "{{ groups.server_group }}"
+
+...

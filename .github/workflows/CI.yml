@@ -165,12 +165,12 @@ jobs:
         - arch
         - fedora34
         - fedora35
+        - fedora36
         - c8s
         - c9s
         - alma8
         - rocky8
         - centos7
-        - centos8
         - debian9
         - debian10
         - debian11
@@ -239,5 +239,11 @@ jobs:
       run: |
         source ~/.virtualenvs/molecule/bin/activate
         molecule -e .env-${{ matrix.os }}.yml test
+
+    - name: molecule tests scenario withoutsystemd
+      run: |
+        sudo docker system prune
+        source ~/.virtualenvs/molecule/bin/activate
+        molecule -e .env-${{ matrix.os }}.yml test -s withoutsystemd
 
 ...

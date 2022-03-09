@@ -1,14 +1,10 @@
-
+# Molecule managed
 
 {% if item.registry is defined %}
 FROM {{ item.registry.url }}/{{ item.image }}
 {% else %}
 FROM {{ item.image }}
 {% endif %}
-
-STOPSIGNAL SIGRTMIN+3
-
-ENV container docker
 
 {% if item.env is defined %}
 {% for var, value in item.env.items() %}
@@ -25,18 +21,4 @@ RUN if [ $(command -v apt-get) ]; then apt-get update && apt-get install -y pyth
     elif [ $(command -v pacman) ]; then pacman -Sy && pacman --noconfirm -Sq core/python core/iproute2 core/sudo core/which core/systemd;\
     fi
 
-RUN if test -d /lib/systemd/system/sysinit.target.wants/ ; then (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done);\
- rm -f /lib/systemd/system/multi-user.target.wants/*;\
- rm -f /etc/systemd/system/*.wants/*;\
- rm -f /lib/systemd/system/local-fs.target.wants/*;\
- rm -f /lib/systemd/system/sockets.target.wants/*udev*;\
- rm -f /lib/systemd/system/sockets.target.wants/*initctl*;\
- rm -f /lib/systemd/system/basic.target.wants/*;\
- rm -f /lib/systemd/system/anaconda.target.wants/*;\
-fi
-
-RUN if test -d /lib/systemd/system/sysinit.target.wants/ ; then ln -s /lib/systemd/system/systemd-user-sessions.service /lib/systemd/system/multi-user.target.wants/; fi
-
-VOLUME [ "/sys/fs/cgroup" ]
-CMD ["/lib/systemd/systemd"]
-
+RUN rm -f /run/nologin

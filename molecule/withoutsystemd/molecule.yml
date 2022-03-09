@@ -1,0 +1,49 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+dependency:
+  name: galaxy
+  options:
+    role-file: idontexist.yml   # avoid warning while running molecule
+    requirements-file: molecule/default/requirements.yml
+
+driver:
+  name: docker
+
+platforms:
+- name: ${CI_HOSTNAME}
+  image: ${CI_IMAGE}
+  pre_build_image: false
+  networks:
+    - name: molecule-external
+  groups:
+    - server_group
+
+- name: ci-client
+  image: quay.io/rockylinux/rockylinux:8
+  pre_build_image: false
+  networks:
+    - name: molecule-external
+  groups:
+    - client_group
+
+provisioner:
+  name: ansible
+  ansible_args:
+    - --tags=all,debug
+    - --diff
+  config_options:
+    defaults:
+      gathering: smart
+      interpreter_python: auto
+  lint:
+    name: ansible-lint
+
+verifier:
+  name: ansible
+  lint:
+    name: ansible-lint
+
+...

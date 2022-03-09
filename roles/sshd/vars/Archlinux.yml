@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) 2021,2022 Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
@@ -7,6 +7,7 @@ sshd_packages:
 - core/openssh
 
 sshd_keygen_service: sshdgenkeys.service
+sshd_keygen: /usr/bin/ssh-keygen -A
 sshd_service: sshd
 sftp_subsystem: /usr/lib/ssh/sftp-server
 

@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# Copyright (c) 2021,2022 Markus Falb <markus.falb@mafalb.at>
 # GNU General Public License v3.0+
 # see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
 ---
@@ -17,19 +17,15 @@
   - sshd_config.Match is defined
   - false
 
-- block:
-
+# avoid starting of service before it is configured
+# not strictly necessary
+- name: mask sshd on debian on initial install
+  block:
     - name: check if ssh service unit is present # noqa command-instead-of-module 303
       command: systemctl cat {{ sshd_service }}
       register: __reg_check_for_service_unit
       changed_when: false
       failed_when: false
-      when:
-        - ansible_os_family == 'Debian'
-        - ansible_service_mgr == 'systemd'
-
-    # avoid starting of service before it is configured
-    # not strictly necessary
     - name: sshd is masked
       ansible.builtin.systemd:
         name: "{{ sshd_service }}"
@@ -38,7 +34,7 @@
         - __reg_check_for_service_unit.rc != 0
   when:
     - ansible_os_family == 'Debian'
-    - ansible_service_mgr == 'systemd'
+    - not container_build|default(false)
 
 - name: sshd is present
   package:
@@ -62,17 +58,18 @@
     notify: reload sshd
     when: sshd_config_has_global_include
 
-  # RedHat only:
-  #
   # if the keys does not exist yet
-  # the validation of sshd_config in the next task would fail
+  # the validation of sshd_config in the next task could fail
   # so generate the keys manually
   #
   - name: hostkeys are generated
-    service:
-      name: "{{ sshd_keygen_service }}"
-      state: started
-    when: sshd_keygen_service is defined
+    command: "{{ sshd_keygen_dict[sshd_keytype].command|default(sshd_keygen) }}"
+    args:
+      creates: /etc/ssh/ssh_host_{{ sshd_keygen_dict[sshd_keytype].type|default('*') }}_key
+    loop: "{{ sshd_hostkeytypes }}"
+    loop_control:
+      loop_var: sshd_keytype
+    when: sshd_keygen_dict|default(sshd_keygen) is defined
 
   # similar situation on Debian
   # validation fails with
@@ -103,6 +100,8 @@
     state: started
     enabled: true
     masked: false
+  when: not container_build|default(false)
+
   register: _sshd_was_just_started
 
 ...

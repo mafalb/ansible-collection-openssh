@@ -1,0 +1,39 @@
+# Copyright (c) 2021 Markus Falb <markus.falb@mafalb.at>
+# GNU General Public License v3.0+
+# see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt
+---
+
+- name: converge client
+  hosts: client_group
+  tasks:
+    - name: ssh user key is present
+      openssh_keypair:
+        path: /tmp/id_rsa
+        type: rsa
+
+- name: converge server
+  hosts: server_group
+  vars:
+    container_build: true
+  pre_tasks:
+    - name: user is present
+      user:
+        name: testssh1
+        create_home: false
+      loop:
+    - name: get public user key
+      delegate_to: "{{ item }}"
+      command: cat /tmp/id_rsa.pub
+      changed_when: false
+      loop: "{{ groups.client_group }}"
+      register: _public_keys
+  roles:
+    - role: mafalb.openssh.sshd
+    - role: mafalb.openssh.authorized_keys
+      user: root
+      group: testssh1
+      keys: "{{ _public_keys.results|map(attribute='stdout')|list }}"
+      path: /home/testssh1/.ssh/authorized_keys
+      mode: '640'
+
+...
